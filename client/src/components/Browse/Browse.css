@@ -1,0 +1,33 @@
+.browse {
+    text-align: center;
+}
+
+.search-area {
+    text-align: center;
+    padding: 50px 0px 50px 0px;
+}
+
+.search-bar {
+    display: inline-block;
+    width: 1000px;
+    height: 45px;
+    border: 1px solid rgb(61, 61, 0);
+    font-size: 30px;
+}
+
+.browse-content {
+    border: 1px solid gray;
+    width: 90%;
+    display: inline-flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.browse-survey {
+    border: 1px solid black;
+    margin: 20px;
+    display: inline-block;
+    width: 30%;
+    height: 100px;
+    flex-grow: 1;
+}

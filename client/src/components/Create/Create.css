@@ -1,0 +1,26 @@
+.create {
+    text-align: center;
+}
+
+.create-form {
+    border: 1px solid brown;
+    display: inline-block;
+    text-align: left;
+    padding: 20px;
+    width: 600px;
+    max-width: 80%;
+}
+
+.create-form h2 {
+    text-align: center;
+}
+
+.create-form h3 {
+    margin: 5px 0px 5px 0px;
+}
+
+.create-form input, textarea {
+    width: 100%;
+    font-size: 20px;
+    margin: 10px 0px 10px 0px;
+}
