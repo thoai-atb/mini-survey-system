@@ -1,17 +1,24 @@
 nav {
-    border: 1px solid green;
     display: flex;
     justify-content: space-between;
+    background-color: rgb(218, 218, 218);
+    border-radius: 4em 8em;
 }
 
 .nav-left {
     display: flex;
-    border: 1px solid blue;
     justify-content: space-between;
 }
 
 .nav-item {
     display: inline-block;
-    border: 1px solid red;
+    padding: 5px 0px 5px 0px;
     margin: 0px 20px 0px 20px;
+}
+
+.nav-item p {
+    font-size: 25px;
+    line-height: 0;
+    font-weight: bolder;
+    text-decoration: none;
 }
