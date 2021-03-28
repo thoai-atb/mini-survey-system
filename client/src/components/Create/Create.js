@@ -3,9 +3,8 @@ import './Create.css'
 
 const Create = () => {
     return (
-        <div className='create'>
-            <h1>Create</h1>
-            <div className='create-form'>
+        <div className='txt-ctr'>
+            <div className='form'>
                 <h2>Create New Survey</h2>
                 <form>
                     <h3>Title</h3>
@@ -16,7 +15,9 @@ const Create = () => {
                     <input type='text'></input>
                     <input type='text'></input>
                     <input type='text'></input>
-                    <button>Create</button>
+                    <div className='txt-ctr'>
+                        <button>Create</button>
+                    </div>
                 </form>
             </div>
         </div>

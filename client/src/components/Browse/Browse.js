@@ -10,28 +10,60 @@ const Browse = () => {
             </div>
             <div className='browse-content'>
                 <div className='browse-survey'>
-                    hotdog
+                    <div class="survey-title">What is love?</div>
+                    <div class="surver-footer">
+                        <div class="survey-date-info">3/28/2021</div>
+                        <div class="survey-author-info">John Wick</div>
+                    </div>
                 </div>
                 <div className='browse-survey'>
-                    banana
+                    <div class="survey-title">What is love?</div>
+                    <div class="surver-footer">
+                        <div class="survey-date-info">3/28/2021</div>
+                        <div class="survey-author-info">John Wick</div>
+                    </div>
                 </div>
                 <div className='browse-survey'>
-                    chirstmas
+                    <div class="survey-title">What is love?</div>
+                    <div class="surver-footer">
+                        <div class="survey-date-info">3/28/2021</div>
+                        <div class="survey-author-info">John Wick</div>
+                    </div>
                 </div>
                 <div className='browse-survey'>
-                    this new year I have a new song
+                    <div class="survey-title">What is love?</div>
+                    <div class="surver-footer">
+                        <div class="survey-date-info">3/28/2021</div>
+                        <div class="survey-author-info">John Wick</div>
+                    </div>
                 </div>
                 <div className='browse-survey'>
-                    jude
+                    <div class="survey-title">What is love?</div>
+                    <div class="surver-footer">
+                        <div class="survey-date-info">3/28/2021</div>
+                        <div class="survey-author-info">John Wick</div>
+                    </div>
                 </div>
                 <div className='browse-survey'>
-                    yellow yard
+                    <div class="survey-title">What is love?</div>
+                    <div class="surver-footer">
+                        <div class="survey-date-info">3/28/2021</div>
+                        <div class="survey-author-info">John Wick</div>
+                    </div>
                 </div>
                 <div className='browse-survey'>
-                    corn
+                    <div class="survey-title">What is love?</div>
+                    <div class="surver-footer">
+                        <div class="survey-date-info">3/28/2021</div>
+                        <div class="survey-author-info">John Wick</div>
+                    </div>
                 </div>
                 <div className='browse-survey'>
-                    chicken 
+                    <div class="survey-title">What is love?</div>
+                    <div class="surver-footer">
+                        <div class="survey-date-info">3/28/2021</div>
+                        <div class="survey-author-info">John Wick</div>
+                    </div>
                 </div>
             </div>
         </div>

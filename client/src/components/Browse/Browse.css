@@ -24,10 +24,24 @@
 }
 
 .browse-survey {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
     border: 1px solid black;
     margin: 20px;
-    display: inline-block;
-    width: 30%;
+    width: 20%;
     height: 100px;
     flex-grow: 1;
+    text-align: left;
+    padding: 10px;
+}
+
+.survey-title { 
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.survey-footer {
+    font-size: 15px;
+    color:rgb(75, 75, 75)
 }
