@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
+import './style.css'
 
 const Login = () => {
     const [error, setError] = useState('');
@@ -31,9 +32,9 @@ const Login = () => {
                 <h2>Login</h2>
                 <form onSubmit={handler}>
                     <h3>Email</h3>
-                    <input type='email' ref={emailRef}></input>
+                    <input type='email' required ref={emailRef}></input>
                     <h3>Password</h3>
-                    <input type='password' ref={passRef}></input>
+                    <input type='password' required ref={passRef}></input>
                     {
                         error && (
                             <div className='error-msg'>{error}</div>

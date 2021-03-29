@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
+import './style.css'
 
 const Signup = () => {
     const [error, setError] = useState('');
@@ -24,7 +25,7 @@ const Signup = () => {
             setLoading(true)
             await signup(emailRef.current.value, passRef.current.value)
             setLoading(false)
-            history.push('/login')
+            history.push('/')
         } catch (e) {
             setError(e.message)
             setLoading(false)

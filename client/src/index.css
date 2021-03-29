@@ -23,16 +23,16 @@ body {
     border-radius: 20px 40px;
 }
 
-.card h2 {
+h2 {
     text-align: center;
     margin: 20px;
 }
 
-.card h3 {
+h3 {
     margin: 5px 0px 5px 0px;
 }
 
-.card input, textarea {
+input, textarea {
     width: 100%;
     font-size: 20px;
     margin: 10px 0px 10px 0px;
@@ -40,7 +40,7 @@ body {
     box-sizing: border-box;
 }
 
-.card input:focus, textarea:focus {
+input:focus, textarea:focus {
     outline: 5px solid var(--color1);
 }
 
@@ -58,18 +58,4 @@ button:focus {
 
 button:active {
     outline: none;
-}
-
-.login-form {
-    width: 400px;
-    padding: 20px 50px 20px 50px;
-}
-
-.post-form-message {
-    margin-top: 20px;
-}
-
-.error-msg {
-    color: red;
-    padding: 10px;
 }

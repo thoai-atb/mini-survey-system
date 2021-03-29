@@ -1,0 +1,13 @@
+.login-form {
+    width: 400px;
+    padding: 20px 50px 20px 50px;
+}
+
+.post-form-message {
+    margin-top: 20px;
+}
+
+.error-msg {
+    color: red;
+    padding: 10px;
+}

@@ -8,11 +8,33 @@
 }
 
 .search-bar {
-    display: inline-block;
+    display: inline-flex;
+    justify-content: left;
     width: 1000px;
     height: 45px;
     border: 1px solid rgb(61, 61, 0);
     font-size: 30px;
+    border-radius: 20px;
+}
+
+.search-bar svg {
+    height: 100%;
+    padding: 0px 20px 0px 20px;
+}
+
+.search-bar input {
+    height: 100%;
+    flex-grow: 1;
+    width: 100px;
+    margin: 0px 20px 0px 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    background-color: transparent;
+    border: none;
+}
+
+.search-bar input:focus {
+    outline: none;
 }
 
 .browse-content {
