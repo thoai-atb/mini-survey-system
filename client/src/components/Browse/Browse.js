@@ -10,59 +10,59 @@ const Browse = () => {
             </div>
             <div className='browse-content'>
                 <div className='browse-survey'>
-                    <div class="survey-title">What is love?</div>
-                    <div class="surver-footer">
-                        <div class="survey-date-info">3/28/2021</div>
-                        <div class="survey-author-info">John Wick</div>
+                    <div className="survey-title">What is love?</div>
+                    <div className="surver-footer">
+                        <div className="survey-date-info">3/28/2021</div>
+                        <div className="survey-author-info">John Wick</div>
                     </div>
                 </div>
                 <div className='browse-survey'>
-                    <div class="survey-title">What is love?</div>
-                    <div class="surver-footer">
-                        <div class="survey-date-info">3/28/2021</div>
-                        <div class="survey-author-info">John Wick</div>
+                    <div className="survey-title">What is love?</div>
+                    <div className="surver-footer">
+                        <div className="survey-date-info">3/28/2021</div>
+                        <div className="survey-author-info">John Wick</div>
                     </div>
                 </div>
                 <div className='browse-survey'>
-                    <div class="survey-title">What is love?</div>
-                    <div class="surver-footer">
-                        <div class="survey-date-info">3/28/2021</div>
-                        <div class="survey-author-info">John Wick</div>
+                    <div className="survey-title">What is love?</div>
+                    <div className="surver-footer">
+                        <div className="survey-date-info">3/28/2021</div>
+                        <div className="survey-author-info">John Wick</div>
                     </div>
                 </div>
                 <div className='browse-survey'>
-                    <div class="survey-title">What is love?</div>
-                    <div class="surver-footer">
-                        <div class="survey-date-info">3/28/2021</div>
-                        <div class="survey-author-info">John Wick</div>
+                    <div className="survey-title">What is love?</div>
+                    <div className="surver-footer">
+                        <div className="survey-date-info">3/28/2021</div>
+                        <div className="survey-author-info">John Wick</div>
                     </div>
                 </div>
                 <div className='browse-survey'>
-                    <div class="survey-title">What is love?</div>
-                    <div class="surver-footer">
-                        <div class="survey-date-info">3/28/2021</div>
-                        <div class="survey-author-info">John Wick</div>
+                    <div className="survey-title">What is love?</div>
+                    <div className="surver-footer">
+                        <div className="survey-date-info">3/28/2021</div>
+                        <div className="survey-author-info">John Wick</div>
                     </div>
                 </div>
                 <div className='browse-survey'>
-                    <div class="survey-title">What is love?</div>
-                    <div class="surver-footer">
-                        <div class="survey-date-info">3/28/2021</div>
-                        <div class="survey-author-info">John Wick</div>
+                    <div className="survey-title">What is love?</div>
+                    <div className="surver-footer">
+                        <div className="survey-date-info">3/28/2021</div>
+                        <div className="survey-author-info">John Wick</div>
                     </div>
                 </div>
                 <div className='browse-survey'>
-                    <div class="survey-title">What is love?</div>
-                    <div class="surver-footer">
-                        <div class="survey-date-info">3/28/2021</div>
-                        <div class="survey-author-info">John Wick</div>
+                    <div className="survey-title">What is love?</div>
+                    <div className="surver-footer">
+                        <div className="survey-date-info">3/28/2021</div>
+                        <div className="survey-author-info">John Wick</div>
                     </div>
                 </div>
                 <div className='browse-survey'>
-                    <div class="survey-title">What is love?</div>
-                    <div class="surver-footer">
-                        <div class="survey-date-info">3/28/2021</div>
-                        <div class="survey-author-info">John Wick</div>
+                    <div className="survey-title">What is love?</div>
+                    <div className="surver-footer">
+                        <div className="survey-date-info">3/28/2021</div>
+                        <div className="survey-author-info">John Wick</div>
                     </div>
                 </div>
             </div>

@@ -4,7 +4,7 @@ import './Create.css'
 const Create = () => {
     return (
         <div className='txt-ctr'>
-            <div className='form'>
+            <div className='card'>
                 <h2>Create New Survey</h2>
                 <form>
                     <h3>Title</h3>

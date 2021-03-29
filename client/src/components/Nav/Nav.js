@@ -1,9 +1,11 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
+import { useAuth } from "../../contexts/AuthContext"
 import './Nav.css'
 import logo from "./minisurvey.png"
 
 const Nav = () => {
+    const { currentUser } = useAuth()
     return (
         <nav>
           <div className="nav-left">
@@ -26,11 +28,25 @@ const Nav = () => {
               </Link>
             </div>
           </div>
-          <div className="nav-item">
-              <Link style={{textDecoration: 'none'}} to='/login'>
-                <p>Login</p>
-              </Link>
-          </div>
+          {
+            currentUser && (
+              <div className="nav-item">
+                <Link style={{textDecoration: 'none'}} to='/profile'>
+                  <p>{currentUser.email}</p>
+                </Link>
+              </div>
+            )
+          }
+          {
+            !currentUser && (
+              <div className="nav-item">
+                <Link style={{textDecoration: 'none'}} to='/login'>
+                  <p>Login</p>
+                </Link>
+              </div>
+            )
+          }
+          
         </nav>
     )
 }
