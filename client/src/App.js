@@ -8,6 +8,7 @@ import Login from './components/Authentication/Login'
 import Signup from './components/Authentication/Signup'
 import Profile from './components/Profile/Profile'
 import PrivateRoute from './components/PrivateRoute/PrivateRoute'
+import Survey from './components/Survey/Survey'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/create" exact component={Create} />
           <Route path="/login" exact component={Login} />
           <Route path="/signup" exact component={Signup} />
+          <Route path="/survey" exact component={Survey} />
           <PrivateRoute path="/profile" exact component={Profile} />
         </div>
       </AuthProvider>

@@ -9,6 +9,7 @@ const Signup = () => {
     const { signup } = useAuth() 
     const emailRef = useRef(null);
     const passRef = useRef(null);
+    const nameRef = useRef(null);
     const conPassRef = useRef(null);
     const history = useHistory();
 
@@ -24,6 +25,7 @@ const Signup = () => {
             setError('')
             setLoading(true)
             await signup(emailRef.current.value, passRef.current.value)
+            // call back-end api to create new user here
             setLoading(false)
             history.push('/')
         } catch (e) {
@@ -37,6 +39,8 @@ const Signup = () => {
             <div className='card login-form'>
                 <h2>Sign Up</h2>
                 <form onSubmit={handler}>
+                    <h3>Username</h3>
+                    <input type='text' required ref={nameRef}></input>
                     <h3>Email</h3>
                     <input type='email' required ref={emailRef}></input>
                     <h3>Password</h3>
