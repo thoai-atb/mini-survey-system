@@ -1,189 +1,82 @@
--- phpMyAdmin SQL Dump
--- version 5.0.4
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Mar 26, 2021 at 05:27 AM
--- Server version: 10.4.17-MariaDB
--- PHP Version: 7.3.26
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `mini_survey_system`
---
+CREATE DATABASE IF NOT EXISTS `mini_survey_system` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `mini_survey_system`;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `answers`
---
-
-CREATE TABLE `answers` (
-  `user` int(11) NOT NULL,
-  `survey` int(11) NOT NULL,
-  `survey_option` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `comments`
---
-
-CREATE TABLE `comments` (
-  `id` int(11) NOT NULL,
-  `text` text NOT NULL,
-  `survey` int(11) NOT NULL,
-  `user` int(11) NOT NULL,
-  `date` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `surveys`
---
-
-CREATE TABLE `surveys` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `comments`;
+CREATE TABLE IF NOT EXISTS `comments` (
+  `comment_id` int(11) UNSIGNED NOT NULL,
+  `survey_Id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
   `title` varchar(100) NOT NULL,
-  `description` text DEFAULT NULL,
-  `author` int(11) NOT NULL
+  `description` text NOT NULL,
+  `time` datetime NOT NULL,
+  PRIMARY KEY (`comment_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `survey_options`
---
-
-CREATE TABLE `survey_options` (
-  `id` int(11) NOT NULL,
-  `text` text NOT NULL,
-  `count` int(11) NOT NULL DEFAULT 0,
-  `survey` int(11) NOT NULL
+DROP TABLE IF EXISTS `surveys`;
+CREATE TABLE IF NOT EXISTS `surveys` (
+  `survey_id` int(11) UNSIGNED NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `description` text NOT NULL,
+  `author` int(11) UNSIGNED NOT NULL,
+  `total_viewed` int(11) UNSIGNED NOT NULL,
+  `total_answered` int(11) UNSIGNED NOT NULL,
+  PRIMARY KEY (`survey_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
+DROP TABLE IF EXISTS `survey_options`;
+CREATE TABLE IF NOT EXISTS `survey_options` (
+  `option_id` int(11) UNSIGNED NOT NULL,
+  `survey_id` int(11) UNSIGNED NOT NULL,
+  `description` text NOT NULL,
+  `number` int(11) UNSIGNED NOT NULL,
+  PRIMARY KEY (`option_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Table structure for table `users`
---
-
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `user_id` int(11) UNSIGNED NOT NULL,
   `email` varchar(50) NOT NULL,
-  `username` varchar(20) NOT NULL
+  `username` varchar(20) NOT NULL,
+  `user_token` varchar(100) NOT NULL,
+  PRIMARY KEY (`user_id`) USING BTREE,
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `user_token` (`user_token`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Indexes for dumped tables
---
+DROP TABLE IF EXISTS `user_answers`;
+CREATE TABLE IF NOT EXISTS `user_answers` (
+  `answer_id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `survey_id` int(11) UNSIGNED NOT NULL,
+  `option_id` int(11) UNSIGNED NOT NULL,
+  PRIMARY KEY (`answer_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Indexes for table `answers`
---
-ALTER TABLE `answers`
-  ADD PRIMARY KEY (`user`,`survey`),
-  ADD KEY `answer-survey` (`survey`),
-  ADD KEY `answer-survey-option` (`survey_option`);
 
---
--- Indexes for table `comments`
---
 ALTER TABLE `comments`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `comment-from-survey` (`survey`),
-  ADD KEY `comment-from-user` (`user`);
+  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`survey_Id`) REFERENCES `surveys` (`survey_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Indexes for table `surveys`
---
 ALTER TABLE `surveys`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user-create-survey` (`author`);
+  ADD CONSTRAINT `surveys_ibfk_1` FOREIGN KEY (`author`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Indexes for table `survey_options`
---
 ALTER TABLE `survey_options`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `survey-contains-option` (`survey`);
+  ADD CONSTRAINT `survey_options_ibfk_1` FOREIGN KEY (`survey_id`) REFERENCES `surveys` (`survey_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `comments`
---
-ALTER TABLE `comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `surveys`
---
-ALTER TABLE `surveys`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `survey_options`
---
-ALTER TABLE `survey_options`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `answers`
---
-ALTER TABLE `answers`
-  ADD CONSTRAINT `answer-survey` FOREIGN KEY (`survey`) REFERENCES `surveys` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `answer-survey-option` FOREIGN KEY (`survey_option`) REFERENCES `survey_options` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `answer-user` FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `comments`
---
-ALTER TABLE `comments`
-  ADD CONSTRAINT `comment-from-survey` FOREIGN KEY (`survey`) REFERENCES `surveys` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `comment-from-user` FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `surveys`
---
-ALTER TABLE `surveys`
-  ADD CONSTRAINT `user-create-survey` FOREIGN KEY (`author`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `survey_options`
---
-ALTER TABLE `survey_options`
-  ADD CONSTRAINT `survey-contains-option` FOREIGN KEY (`survey`) REFERENCES `surveys` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `user_answers`
+  ADD CONSTRAINT `user_answers_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `user_answers_ibfk_2` FOREIGN KEY (`survey_id`) REFERENCES `surveys` (`survey_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `user_answers_ibfk_3` FOREIGN KEY (`option_id`) REFERENCES `survey_options` (`option_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
