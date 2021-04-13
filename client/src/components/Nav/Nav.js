@@ -1,5 +1,5 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
+import {NavLink} from 'react-router-dom'
 import { useAuth } from "../../contexts/AuthContext"
 import './Nav.css'
 import logo from "./minisurvey.png"
@@ -13,36 +13,46 @@ const Nav = () => {
               <img height="50px" src={logo} alt="logo"></img>
             </div>
             <div className="nav-item">
-              <Link style={{textDecoration: 'none'}} to='/'>
-                <p>Home</p>
-              </Link>
+              <NavLink className='navlink' activeClassName='navlink-active' to='/' exact>
+                <div className='navlink-button'>
+                  <p>Home</p>
+                </div>
+              </NavLink>
             </div>
             <div className="nav-item">
-              <Link style={{textDecoration: 'none'}} to='/browse'>
-                <p>Browse</p>
-              </Link>
+              <NavLink className='navlink' activeClassName='navlink-active' to='/browse'>
+                <div className='navlink-button'>
+                  <p>Browse</p>
+                </div>
+              </NavLink>
             </div>
             <div className="nav-item">
-              <Link style={{textDecoration: 'none'}} to='/create'>
-                <p>Create</p>
-              </Link>
+              <NavLink className='navlink' activeClassName='navlink-active' to='/create'>
+                <div className='navlink-button'>
+                  <p>Create</p>
+                </div>
+              </NavLink>
             </div>
           </div>
           {
             currentUser && (
               <div className="nav-item">
-                <Link style={{textDecoration: 'none'}} to='/profile'>
-                  <p>{currentUser.email}</p>
-                </Link>
+                <NavLink className='navlink' activeClassName='navlink-active' to='/profile'>
+                  <div className='navlink-button'>
+                    <p>{currentUser.email}</p>
+                  </div>
+                </NavLink>
               </div>
             )
           }
           {
             !currentUser && (
               <div className="nav-item">
-                <Link style={{textDecoration: 'none'}} to='/login'>
-                  <p>Login</p>
-                </Link>
+                <NavLink className='navlink' activeClassName='navlink-active' to='/login'>
+                  <div className='navlink-button'>
+                    <p>Login</p>
+                  </div>
+                </NavLink>
               </div>
             )
           }

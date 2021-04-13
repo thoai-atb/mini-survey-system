@@ -1,24 +1,42 @@
 nav {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     background-color: var(--color0);
     border-radius: 4em 8em;
 }
 
 .nav-left {
     display: flex;
+    align-items: center;
     justify-content: space-between;
 }
 
 .nav-item {
     display: inline-block;
+    /* border: 2px solid black; */
     padding: 5px 0px 5px 0px;
     margin: 0px 20px 0px 20px;
 }
 
 .nav-item p {
+    font-family: 'Source Sans Pro', sans-serif;
     font-size: 25px;
     line-height: 0;
-    font-weight: bolder;
+    font-weight: bold;
+}
+
+.navlink {
     text-decoration: none;
+}
+
+.navlink-button {
+    border: 2px solid transparent;
+    padding: 0px 5px 0px 5px;
+    margin: 5px 0px 5px 0px;
+    border-radius: 20% 40%;
+}
+
+.navlink-active .navlink-button {
+    background-color: var(--color1);
 }
