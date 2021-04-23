@@ -12,8 +12,8 @@ USE `mini_survey_system`;
 
 DROP TABLE IF EXISTS `comments`;
 CREATE TABLE IF NOT EXISTS `comments` (
-  `comment_id` int(11) UNSIGNED NOT NULL,
-  `survey_Id` int(11) UNSIGNED NOT NULL,
+  `comment_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `survey_id` int(11) UNSIGNED NOT NULL,
   `user_id` int(11) UNSIGNED NOT NULL,
   `title` varchar(100) NOT NULL,
   `description` text NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
 
 DROP TABLE IF EXISTS `surveys`;
 CREATE TABLE IF NOT EXISTS `surveys` (
-  `survey_id` int(11) UNSIGNED NOT NULL,
+  `survey_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` varchar(100) NOT NULL,
   `description` text NOT NULL,
   `author` int(11) UNSIGNED NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `surveys` (
 
 DROP TABLE IF EXISTS `survey_options`;
 CREATE TABLE IF NOT EXISTS `survey_options` (
-  `option_id` int(11) UNSIGNED NOT NULL,
+  `option_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `survey_id` int(11) UNSIGNED NOT NULL,
   `description` text NOT NULL,
   `number` int(11) UNSIGNED NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `survey_options` (
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
-  `user_id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `email` varchar(50) NOT NULL,
   `username` varchar(20) NOT NULL,
   `user_token` varchar(100) NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 DROP TABLE IF EXISTS `user_answers`;
 CREATE TABLE IF NOT EXISTS `user_answers` (
-  `answer_id` int(11) UNSIGNED NOT NULL,
+  `answer_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` int(11) UNSIGNED NOT NULL,
   `survey_id` int(11) UNSIGNED NOT NULL,
   `option_id` int(11) UNSIGNED NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `user_answers` (
 
 
 ALTER TABLE `comments`
-  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`survey_Id`) REFERENCES `surveys` (`survey_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`survey_id`) REFERENCES `surveys` (`survey_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `surveys`
