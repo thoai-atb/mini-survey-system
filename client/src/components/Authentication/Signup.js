@@ -24,14 +24,29 @@ const Signup = () => {
         try {
             setError('')
             setLoading(true)
-            await signup(emailRef.current.value, passRef.current.value)
-            // call back-end api to create new user here
+            let res = await signup(emailRef.current.value, passRef.current.value)
+            await signupBackend(res.user.uid)
             setLoading(false)
             history.push('/')
         } catch (e) {
             setError(e.message)
             setLoading(false)
         }
+    }
+
+    const signupBackend = async (uid) => {
+        let newUser = {
+            email: emailRef.current.value,
+            username: nameRef.current.value,
+            user_token: uid
+        }
+        await fetch('/api/users', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(newUser)
+        })
     }
 
     return (

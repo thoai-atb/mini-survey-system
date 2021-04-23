@@ -9,6 +9,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState()
+    const [currentUserID] = useState() // ID in minisurvey database
     const [loading, setLoading] = useState(true)
 
     function signup(email, password) {
@@ -43,14 +44,19 @@ export function AuthProvider({ children }) {
         return unsubscribe
     }, [])
 
+    useEffect(() => {
+        // setCurrentUserID here
+    }, [currentUser])
+
     const value = {
         currentUser,
+        currentUserID,
         signup,
         login,
         logout,
         resetPassword,
         updateEmail,
-        updatePassword
+        updatePassword,
     }
 
     return (
