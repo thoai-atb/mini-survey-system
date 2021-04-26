@@ -52,7 +52,7 @@ surveys_router.post('/', (req, res) => {
             console.log(insert)
             connection.query(`INSERT INTO survey_options (survey_id, description) VALUES ${insert}`, (err, rows, fileds) => {
                 if (err) console.log(err); 
-                res.send("Succeeded.");
+                else res.json({msg: "Succeeded."});
             })
         })
     });

@@ -5,7 +5,6 @@ const connection = require('./mysql_connect')
 user_router.get('/', (req, res) => {
     connection.query('DESC users', (err, rows, fields) => {
         if (err) console.log(err);
-
         res.json(rows);
     })
 });
@@ -13,7 +12,6 @@ user_router.get('/', (req, res) => {
 user_router.get('/all', (req, res) => {
     connection.query('SELECT * FROM users', (err, rows, fields) => {
         if (err) console.log(err);
-
         res.json(rows);
     })
 });
@@ -28,16 +26,16 @@ user_router.get('/:userID', (req, res) => {
     })
 });
 
-// Get user_id bases on user_token => return a string
+// Get user_id bases on user_token
 user_router.get('/tokentoid/:userToken', (req, res) => {
     let userToken = req.params.userToken
 
     connection.query(`SELECT user_id FROM users WHERE user_token="${userToken}"`, (err, rows, fields) => {
         if (err) console.log(err);
         if (rows.length == 0){
-            res.send("Could not find user_id corresponding to the given user_token")
+            res.status(400).json({msg :"Could not find user_id corresponding to the given user_token"});
         } else
-            res.send(rows[0]);
+            res.json(rows[0]);
     })
 })
 
@@ -49,7 +47,7 @@ user_router.post('/', (req, res) => {
 
     connection.query(`INSERT INTO users (email, username, user_token) VALUES ("${email}", "${username}", "${user_token}")`, (err, rows, fields) => {
         if (err) console.log(err);
-        else res.send("Succeed.");
+        res.json({msg: "Success."});
     })
 });
 
@@ -62,7 +60,7 @@ user_router.put('/:userID', (req, res) => {
 
     connection.query(`UPDATE users SET email = "${email}", username = "${username}", user_token = "${userToken}" WHERE user_id = "${userID}"`, (err, rows, fields) => {
         if (err) console.log(err);
-        else res.send("Succeed.");
+        res.json({msg : "Suceess."});
     })
 });
 
@@ -72,7 +70,7 @@ user_router.delete('/:userID', (req, res) => {
 
     connection.query(`DELETE FROM users WHERE user_id = "${userID}"`, (err, rows, fields) => {
         if (err) console.log(err);
-        else res.send("Success");
+        res.json({msg : "Suceess."});
     })
 });
 
