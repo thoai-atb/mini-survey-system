@@ -15,6 +15,7 @@ app.use('/api/tables', require('./routes/api/tables'));
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/user_answers', require('./routes/api/user_answers'));
 app.use('/api/survey_options', require('./routes/api/survey_options'));
+app.use('/api/surveys', require('./routes/api/surveys'));
 app.use('/api/comments', require('./routes/api/comments'));
 
 const PORT = process.env.PORT || 5000;

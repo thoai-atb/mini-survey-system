@@ -3,36 +3,43 @@ const user_router = express.Router()
 const connection = require('./mysql_connect')
 
 user_router.get('/', (req, res) => {
-
-
     connection.query('DESC users', (err, rows, fields) => {
-        if (err) console.log(err)
+        if (err) console.log(err);
 
         res.json(rows);
     })
 });
 
 user_router.get('/all', (req, res) => {
-
-
     connection.query('SELECT * FROM users', (err, rows, fields) => {
-        if (err) console.log(err)
+        if (err) console.log(err);
 
         res.json(rows);
     })
 });
 
 // Get info of specific user_id (assume user_id is int)
-user_router.get('/:user_id', (req, res) => {
+user_router.get('/:userID', (req, res) => {
+    let userID = parseInt(req.params.userID);
 
-    let user_id = parseInt(req.params.user_id);
-
-    connection.query(`SELECT * FROM users WHERE user_id = ${user_id}`, (err, rows, fields) => {
+    connection.query(`SELECT * FROM users WHERE user_id = ${userID}`, (err, rows, fields) => {
         if (err) console.log(err);
-
         res.json(rows);
     })
 });
+
+// Get user_id bases on user_token => return a string
+user_router.get('/tokentoid/:userToken', (req, res) => {
+    let userToken = req.params.userToken
+
+    connection.query(`SELECT user_id FROM users WHERE user_token="${userToken}"`, (err, rows, fields) => {
+        if (err) console.log(err);
+        if (rows.length == 0){
+            res.send("Could not find user_id corresponding to the given user_token")
+        } else
+            res.send(rows[0]);
+    })
+})
 
 // Insert new user
 user_router.post('/', (req, res) => {
@@ -42,32 +49,30 @@ user_router.post('/', (req, res) => {
 
     connection.query(`INSERT INTO users (email, username, user_token) VALUES ("${email}", "${username}", "${user_token}")`, (err, rows, fields) => {
         if (err) console.log(err);
-        else res.send("Succeed.")
+        else res.send("Succeed.");
     })
 });
 
 // Update user (not really used)
-user_router.put('/:user_id', (req, res) => {
-    let user_id = parseInt(req.params.user_id);
+user_router.put('/:userID', (req, res) => {
+    let userID = parseInt(req.params.userID);
     let email = req.body.email;
     let username = req.body.username;
-    let user_token = req.body.user_token; 
+    let userToken = req.body.user_token; 
 
-    connection.query(`UPDATE users SET email = "${email}", username = "${username}", user_token = "${user_token}" WHERE user_id = "${user_id}"`, (err, rows, fields) => {
+    connection.query(`UPDATE users SET email = "${email}", username = "${username}", user_token = "${userToken}" WHERE user_id = "${userID}"`, (err, rows, fields) => {
         if (err) console.log(err);
-        else res.send("Succeed.")
+        else res.send("Succeed.");
     })
 });
 
 // Delete user
-user_router.delete('/:user_id', (req, res) => {
+user_router.delete('/:userID', (req, res) => {
+    let userID = parseInt(req.params.userID);
 
-    let user_id = parseInt(req.params.user_id);
-
-    connection.query(`DELETE FROM users WHERE user_id = "${user_id}"`, (err, rows, fields) => {
+    connection.query(`DELETE FROM users WHERE user_id = "${userID}"`, (err, rows, fields) => {
         if (err) console.log(err);
-
-        res.send("Success");
+        else res.send("Success");
     })
 });
 
