@@ -1,12 +1,13 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+00:00";
+SET time_zone = "+07:00";
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+DROP DATABASE IF EXISTS `mini_survey_system`;
 CREATE DATABASE IF NOT EXISTS `mini_survey_system` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `mini_survey_system`;
 
@@ -26,9 +27,9 @@ CREATE TABLE IF NOT EXISTS `surveys` (
   `survey_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` varchar(100) NOT NULL,
   `description` text NOT NULL,
-  `author` int(11) UNSIGNED NOT NULL,
-  `total_viewed` int(11) UNSIGNED NOT NULL,
-  `total_answered` int(11) UNSIGNED NOT NULL,
+  `author_id` int(11) UNSIGNED NOT NULL,
+  `total_viewed` int(11) UNSIGNED DEFAULT 0,
+  `total_answered` int(11) UNSIGNED DEFAULT 0,
   PRIMARY KEY (`survey_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -37,7 +38,6 @@ CREATE TABLE IF NOT EXISTS `survey_options` (
   `option_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `survey_id` int(11) UNSIGNED NOT NULL,
   `description` text NOT NULL,
-  `number` int(11) UNSIGNED NOT NULL,
   PRIMARY KEY (`option_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(50) NOT NULL,
   `username` varchar(20) NOT NULL,
   `user_token` varchar(100) NOT NULL,
-  PRIMARY KEY (`user_id`) USING BTREE,
+  PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `user_token` (`user_token`),
   UNIQUE KEY `email` (`email`)
@@ -68,7 +68,7 @@ ALTER TABLE `comments`
   ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `surveys`
-  ADD CONSTRAINT `surveys_ibfk_1` FOREIGN KEY (`author`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `surveys_ibfk_1` FOREIGN KEY (`author_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `survey_options`
   ADD CONSTRAINT `survey_options_ibfk_1` FOREIGN KEY (`survey_id`) REFERENCES `surveys` (`survey_id`) ON DELETE CASCADE ON UPDATE CASCADE;
