@@ -18,7 +18,7 @@ function App() {
           <Nav />
           <Route path="/" exact component={Home} />
           <Route path="/browse" exact component={Browse} />
-          <Route path="/create" exact component={Create} />
+          <PrivateRoute path="/create" exact component={Create} />
           <Route path="/login" exact component={Login} />
           <Route path="/signup" exact component={Signup} />
           <Route path="/survey" exact component={Survey} />

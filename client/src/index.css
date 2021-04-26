@@ -2,6 +2,7 @@
     --color0: rgb(218, 218, 218);
     --color1: rgb(229, 190, 255);
     --color2: rgb(130, 26, 199);
+    --color3: rgb(27, 156, 15);
 }
 
 body {
@@ -35,6 +36,7 @@ h3 {
 
 input, textarea {
     width: 100%;
+    font-family: inherit;
     font-size: 20px;
     margin: 10px 0px 10px 0px;
     padding: 10px;
@@ -48,7 +50,7 @@ input:focus, textarea:focus {
 button {
     font-size: 20px;
     padding: 10px 30px 10px 30px;
-    margin: 20px 0px 20px 0px;
+    margin: 18px 0px 18px 0px;
     border-radius: 20px;
     color: white;
     background-color: var(--color2);
