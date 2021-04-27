@@ -1,15 +1,25 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import './Survey.css'
 
-export default function Survey() {
+export default function Survey({match}) {
+
+    const [survey, setSurvey] = useState({title: 'loading...'})
+
+    useEffect(() => {
+        const fetchSurvey = async () => {
+            const res = await fetch(`/api/surveys/${match.params.id}`)
+            const data = await res.json()
+            setSurvey(data[0])
+        }
+        fetchSurvey()
+    }, [match])
+
     return (
         <div className="txt-ctr">
-            <div className="card">
-                <h2>Survey Title</h2>
-                <hr></hr>
-                <p>Survey Description: What is love? Baby don't hurt me, don't hurt me, no more.</p>
-                <hr></hr>
-                <h3>Choose one of the followings:</h3>
+            <div className="card survey-card">
+                <h2>{survey.title}</h2>
+                <p className='survey-description'>{survey.description}</p>
+                <h3>🖋 Choose one of the followings:</h3>
                 <div className="survey-option">
                     option 1
                 </div>

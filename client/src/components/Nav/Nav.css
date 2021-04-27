@@ -40,4 +40,5 @@ nav {
 
 .navlink-active .navlink-button {
     background-color: var(--color1);
+    filter: saturate(0.5) brightness(1.2);
 }

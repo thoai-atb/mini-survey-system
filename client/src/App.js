@@ -21,7 +21,7 @@ function App() {
           <PrivateRoute path="/create" exact component={Create} />
           <Route path="/login" exact component={Login} />
           <Route path="/signup" exact component={Signup} />
-          <Route path="/survey" exact component={Survey} />
+          <Route path="/survey/:id" component={Survey} />
           <PrivateRoute path="/profile" exact component={Profile} />
         </div>
       </AuthProvider>
