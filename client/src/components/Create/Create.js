@@ -1,11 +1,11 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import './Create.css'
 
 const Create = () => {
     const { currentUserID } = useAuth()
     const [message, setMessage] = useState()
-    const [messageTimeout, setMessageTimeout] = useState();
+    const [messageTimeout] = useState({});
     const formRef = useRef()
     const titleRef = useRef()
     const descRef = useRef()
@@ -34,6 +34,7 @@ const Create = () => {
             },
             body: JSON.stringify(survey)
         })
+
         if (res.status !== 200) {
             console.log('Could not create survey')
             return
@@ -45,11 +46,19 @@ const Create = () => {
 
     const addMessage = (msg) => {
         setMessage(msg);
-        window.clearTimeout(messageTimeout);
-        setMessageTimeout(setTimeout(() => {
+        window.clearTimeout(messageTimeout.time);
+        messageTimeout.time = (setTimeout(() => {
             setMessage(null);
         }, 2000));
     }
+
+    useEffect(() => {
+        return () => {
+            window.clearTimeout(messageTimeout.time);
+            setMessage(null);
+            console.log('clear here');
+        }
+    }, [messageTimeout])
 
     return (
         <div className='txt-ctr'>

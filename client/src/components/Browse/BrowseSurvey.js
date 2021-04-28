@@ -7,7 +7,6 @@ export default function BrowseSurvey({surveyID, title}) {
     const history = useHistory()
 
     const goToSurvey = () => {
-        console.log(`going to survey ${title} (id = ${surveyID})`)
         history.push(`/survey/${surveyID}`)
     }
 
