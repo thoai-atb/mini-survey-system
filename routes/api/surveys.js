@@ -11,7 +11,7 @@ surveys_router.get('/', (req, res) => {
 });
 
 surveys_router.get('/all', (req, res) => {
-    connection.query('SELECT * FROM surveys', (err, rows, fields) => {
+    connection.query(`SELECT surveys.*, users.username AS author FROM surveys INNER JOIN users WHERE surveys.author_id = users.user_id'`, (err, rows, fields) => {
         if (err) console.log(err)
 
         res.json(rows);
@@ -22,9 +22,16 @@ surveys_router.get('/all', (req, res) => {
 surveys_router.get('/:id', (req, res) => {
     let surveyID = parseInt(req.params.id);
 
-    connection.query(`SELECT * FROM surveys WHERE survey_id = ${surveyID}`, (err, rows, fields) => {
+    connection.query(`SELECT surveys.*, users.username AS author FROM surveys INNER JOIN users 
+    WHERE surveys.author_id = users.user_id AND survey_id = ${surveyID}`, (err, rows, fields) => {
         if (err) console.log(err);
-        res.json(rows);
+        let result = rows[0];
+        connection.query(`SELECT * FROM survey_options WHERE survey_id = ${surveyID}`, (err, rows, fields) => {
+            if (err) console.log(err);
+            result.options = rows;
+            res.json(result);
+        })
+
         // console.log(rows[0]['survey_id']);
         // res.type('txt');
         // res.send(JSON.stringify(rows[0]['survey_id']));
