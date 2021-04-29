@@ -1,11 +1,21 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {NavLink} from 'react-router-dom'
 import { useAuth } from "../../contexts/AuthContext"
 import './Nav.css'
 import logo from "./minisurvey.png"
 
 const Nav = () => {
-    const { currentUser } = useAuth()
+    const [userName, setUserName] = useState()
+    const { currentUser, getUserName } = useAuth()
+
+    useEffect(() => {
+      const fetchUserName = async () => {
+        const name = await getUserName()
+        setUserName(name)
+      }
+      fetchUserName()
+    }, [getUserName])
+
     return (
         <nav>
           <div className="nav-left">
@@ -39,7 +49,7 @@ const Nav = () => {
               <div className="nav-item">
                 <NavLink className='navlink' activeClassName='navlink-active' to='/profile'>
                   <div className='navlink-button'>
-                    <p>{currentUser.email}</p>
+                    <p>{userName}</p>
                   </div>
                 </NavLink>
               </div>
