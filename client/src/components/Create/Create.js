@@ -61,7 +61,7 @@ const Create = () => {
 
     return (
         <div className='txt-ctr'>
-            <div className='card'>
+            <div className='card card-wide'>
                 <h2>Create New Survey</h2>
                 <form onSubmit={submit} ref={formRef}>
                     <h3>Title</h3>

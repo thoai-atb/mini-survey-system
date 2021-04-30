@@ -23,9 +23,13 @@ body {
     text-align: left;
     padding: 10px 30px 20px 30px;
     margin-top: 40px;
-    width: 600px;
+    /* width: 600px; */
     max-width: 80%;
     border-radius: 20px 40px;
+}
+
+.card-wide {
+    width: 600px;
 }
 
 h2 {

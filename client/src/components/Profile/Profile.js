@@ -6,7 +6,7 @@ export default function Profile() {
     
     return (
         <div className="txt-ctr"> 
-            <div className="card">
+            <div className="card card-wide">
                 <p>This is the profile of {currentUser.email}</p> 
                 <button onClick={logout}>Log Out</button>
             </div>

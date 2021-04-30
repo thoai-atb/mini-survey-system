@@ -18,7 +18,7 @@ export default function Survey({match}) {
 
     return (
         <div className="txt-ctr">
-            <div className="card survey-card">
+            <div className="card survey-card card-wide">
                 {
                     survey && (
                         <>
