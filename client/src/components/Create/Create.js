@@ -56,7 +56,6 @@ const Create = () => {
         return () => {
             window.clearTimeout(messageTimeout.time);
             setMessage(null);
-            console.log('clear here');
         }
     }, [messageTimeout])
 

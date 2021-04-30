@@ -28,7 +28,7 @@ const Browse = () => {
                 {
                     surveys && surveys.map((survey, index) => {
                         return (
-                            <BrowseSurvey key={index} surveyID={survey.survey_id} title={survey.title}/>
+                            <BrowseSurvey key={index} surveyID={survey.survey_id} title={survey.title} author={survey.author} date={new Date(survey.time)}/>
                         )
                     })
                 }

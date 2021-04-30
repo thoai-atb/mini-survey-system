@@ -1,10 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Krona+One&display=swap');
 
 .welcome-block {
-    margin: 40px 0px 40px 0px;
+    margin: 30px 0px 30px 0px;
     color: darkblue;
     font-family: 'Krona One', sans-serif;
     text-align: center;
+}
+
+.welcome-block h1 {
+    font-size: 25px;
 }
 
 .welcome-block p {
