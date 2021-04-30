@@ -16,7 +16,6 @@ const Browse = () => {
 
     return (
         <div className='browse'>
-            <h1>Browse</h1>
             <div className='search-area'>
                 <div className='search-bar'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
