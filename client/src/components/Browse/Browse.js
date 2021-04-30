@@ -1,10 +1,21 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import BrowseSurvey from './BrowseSurvey'
 import './Browse.css'
 
 const Browse = () => {
+    const [surveys, setSurveys] = useState(null)
+    
+    useEffect(() => {
+        const loadSurvey = async () => {
+            const res = await fetch('/api/surveys/all')
+            const data = await res.json()
+            setSurveys(data)
+        }
+        loadSurvey()
+    }, [])
+
     return (
         <div className='browse'>
-            <h1>Browse</h1>
             <div className='search-area'>
                 <div className='search-bar'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
@@ -14,62 +25,13 @@ const Browse = () => {
                 </div>
             </div>
             <div className='browse-content'>
-                <div className='browse-survey'>
-                    <div className="survey-title">What is love?</div>
-                    <div className="surver-footer">
-                        <div className="survey-date-info">3/28/2021</div>
-                        <div className="survey-author-info">John Wick</div>
-                    </div>
-                </div>
-                <div className='browse-survey'>
-                    <div className="survey-title">What is love?</div>
-                    <div className="surver-footer">
-                        <div className="survey-date-info">3/28/2021</div>
-                        <div className="survey-author-info">John Wick</div>
-                    </div>
-                </div>
-                <div className='browse-survey'>
-                    <div className="survey-title">What is love?</div>
-                    <div className="surver-footer">
-                        <div className="survey-date-info">3/28/2021</div>
-                        <div className="survey-author-info">John Wick</div>
-                    </div>
-                </div>
-                <div className='browse-survey'>
-                    <div className="survey-title">What is love?</div>
-                    <div className="surver-footer">
-                        <div className="survey-date-info">3/28/2021</div>
-                        <div className="survey-author-info">John Wick</div>
-                    </div>
-                </div>
-                <div className='browse-survey'>
-                    <div className="survey-title">What is love?</div>
-                    <div className="surver-footer">
-                        <div className="survey-date-info">3/28/2021</div>
-                        <div className="survey-author-info">John Wick</div>
-                    </div>
-                </div>
-                <div className='browse-survey'>
-                    <div className="survey-title">What is love?</div>
-                    <div className="surver-footer">
-                        <div className="survey-date-info">3/28/2021</div>
-                        <div className="survey-author-info">John Wick</div>
-                    </div>
-                </div>
-                <div className='browse-survey'>
-                    <div className="survey-title">What is love?</div>
-                    <div className="surver-footer">
-                        <div className="survey-date-info">3/28/2021</div>
-                        <div className="survey-author-info">John Wick</div>
-                    </div>
-                </div>
-                <div className='browse-survey'>
-                    <div className="survey-title">What is love?</div>
-                    <div className="surver-footer">
-                        <div className="survey-date-info">3/28/2021</div>
-                        <div className="survey-author-info">John Wick</div>
-                    </div>
-                </div>
+                {
+                    surveys && surveys.map((survey, index) => {
+                        return (
+                            <BrowseSurvey key={index} surveyID={survey.survey_id} title={survey.title} author={survey.author} date={new Date(survey.time)}/>
+                        )
+                    })
+                }
             </div>
         </div>
     )

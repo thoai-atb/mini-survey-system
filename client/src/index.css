@@ -1,8 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
+
 :root {
-    --color0: rgb(218, 218, 218);
+    --color0: rgb(230, 230, 230);
     --color1: rgb(229, 190, 255);
     --color2: rgb(130, 26, 199);
-    --color3: rgb(27, 156, 15);
+    --color3: rgb(255, 206, 206);
+    --color4: rgb(27, 156, 15);
 }
 
 body {
@@ -20,9 +23,13 @@ body {
     text-align: left;
     padding: 10px 30px 20px 30px;
     margin-top: 40px;
-    width: 600px;
+    /* width: 600px; */
     max-width: 80%;
     border-radius: 20px 40px;
+}
+
+.card-wide {
+    width: 600px;
 }
 
 h2 {

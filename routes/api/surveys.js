@@ -11,7 +11,7 @@ surveys_router.get('/', (req, res) => {
 });
 
 surveys_router.get('/all', (req, res) => {
-    connection.query(`SELECT surveys.*, users.username AS author FROM surveys INNER JOIN users WHERE surveys.author_id = users.user_id'`, (err, rows, fields) => {
+    connection.query(`SELECT surveys.*, users.username AS author FROM surveys INNER JOIN users WHERE surveys.author_id = users.user_id`, (err, rows, fields) => {
         if (err) console.log(err)
 
         res.json(rows);

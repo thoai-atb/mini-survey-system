@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Krona+One&display=swap');
+
+.welcome-block {
+    margin: 30px 0px 30px 0px;
+    color: darkblue;
+    font-family: 'Krona One', sans-serif;
+    text-align: center;
+}
+
+.welcome-block h1 {
+    font-size: 25px;
+}
+
+.welcome-block p {
+    font-size: 20px;
+}
+
+.main-area {
+    display: flex;
+    justify-content: center;
+    /* border: 2px solid gray; */
+}
+
+.board {
+    background-color: var(--color0);
+    padding: 50px;
+    min-height: 500px;
+    margin: 20px 20px 20px 20px;
+    width: 20%;
+    border-radius: 20px 40px;
+}
