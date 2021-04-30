@@ -39,6 +39,15 @@ user_router.get('/tokentoid/:userToken', (req, res) => {
     })
 })
 
+// Get list of surveys user has created (owned)
+user_router.get('/:userID/surveys', (req, res) => {
+    let userID = parseInt(req.params.userID);
+    connection.query(`SELECT * FROM surveys WHERE author_id = ${userID}`, (err, rows, fields) => {
+        if (err) console.log(err);
+        res.json(rows);
+    })
+})
+
 // Insert new user
 user_router.post('/', (req, res) => {
     let email = req.body.email;

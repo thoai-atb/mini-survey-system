@@ -1,13 +1,13 @@
+SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+07:00";
+SET time_zone = "+00:00";
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
-DROP DATABASE IF EXISTS `mini_survey_system`;
 CREATE DATABASE IF NOT EXISTS `mini_survey_system` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `mini_survey_system`;
 
@@ -19,7 +19,9 @@ CREATE TABLE IF NOT EXISTS `comments` (
   `title` varchar(100) NOT NULL,
   `description` text NOT NULL,
   `time` datetime NOT NULL,
-  PRIMARY KEY (`comment_id`)
+  PRIMARY KEY (`comment_id`),
+  KEY `comments_ibfk_1` (`survey_id`),
+  KEY `comments_ibfk_2` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `surveys`;
@@ -28,9 +30,11 @@ CREATE TABLE IF NOT EXISTS `surveys` (
   `title` varchar(100) NOT NULL,
   `description` text NOT NULL,
   `author_id` int(11) UNSIGNED NOT NULL,
+  `time` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `total_viewed` int(11) UNSIGNED DEFAULT 0,
   `total_answered` int(11) UNSIGNED DEFAULT 0,
-  PRIMARY KEY (`survey_id`)
+  PRIMARY KEY (`survey_id`),
+  KEY `surveys_ibfk_1` (`author_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `survey_options`;
@@ -38,7 +42,8 @@ CREATE TABLE IF NOT EXISTS `survey_options` (
   `option_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `survey_id` int(11) UNSIGNED NOT NULL,
   `description` text NOT NULL,
-  PRIMARY KEY (`option_id`)
+  PRIMARY KEY (`option_id`),
+  KEY `survey_options_ibfk_1` (`survey_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `users`;
@@ -59,7 +64,10 @@ CREATE TABLE IF NOT EXISTS `user_answers` (
   `user_id` int(11) UNSIGNED NOT NULL,
   `survey_id` int(11) UNSIGNED NOT NULL,
   `option_id` int(11) UNSIGNED NOT NULL,
-  PRIMARY KEY (`answer_id`)
+  PRIMARY KEY (`answer_id`),
+  KEY `user_answers_ibfk_1` (`user_id`),
+  KEY `user_answers_ibfk_2` (`survey_id`),
+  KEY `user_answers_ibfk_3` (`option_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
@@ -77,6 +85,7 @@ ALTER TABLE `user_answers`
   ADD CONSTRAINT `user_answers_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `user_answers_ibfk_2` FOREIGN KEY (`survey_id`) REFERENCES `surveys` (`survey_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `user_answers_ibfk_3` FOREIGN KEY (`option_id`) REFERENCES `survey_options` (`option_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
