@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
   `user_id` int(11) UNSIGNED NOT NULL,
   `title` varchar(100) NOT NULL,
   `description` text NOT NULL,
-  `time` datetime NOT NULL,
+  `time` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`comment_id`),
   KEY `comments_ibfk_1` (`survey_id`),
   KEY `comments_ibfk_2` (`user_id`)
@@ -64,11 +64,18 @@ CREATE TABLE IF NOT EXISTS `user_answers` (
   `user_id` int(11) UNSIGNED NOT NULL,
   `survey_id` int(11) UNSIGNED NOT NULL,
   `option_id` int(11) UNSIGNED NOT NULL,
+  `time` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`answer_id`),
   KEY `user_answers_ibfk_1` (`user_id`),
   KEY `user_answers_ibfk_2` (`survey_id`),
   KEY `user_answers_ibfk_3` (`option_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+DROP TRIGGER IF EXISTS `increase_total_answered`;
+DELIMITER $$
+CREATE TRIGGER `increase_total_answered` AFTER INSERT ON `user_answers` FOR EACH ROW UPDATE surveys 
+SET surveys.total_answered = surveys.total_answered + 1 WHERE surveys.survey_id = NEW.survey_id
+$$
+DELIMITER ;
 
 
 ALTER TABLE `comments`
