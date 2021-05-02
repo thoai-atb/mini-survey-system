@@ -126,29 +126,7 @@ surveys_router.get('/', (req, res) => {
             })
         })
     }
-    // console.log({"surveyID" : surveyID, "userID" : userID});
-    // res.status(200).json({"surveyID" : surveyID, "userID" : userID});
 });
-
-
-// surveys_router.get('/:id', (req, res) => {
-//     let surveyID = parseInt(req.params.id);
-
-//     connection.query(`SELECT surveys.*, users.username AS author FROM surveys INNER JOIN users 
-//     WHERE surveys.author_id = users.user_id AND survey_id = ${surveyID}`, (err, rows, fields) => {
-//         if (err) console.log(err);
-//         let result = rows[0];
-//         connection.query(`SELECT * FROM survey_options WHERE survey_id = ${surveyID}`, (err, rows, fields) => {
-//             if (err) console.log(err);
-//             result.options = rows;
-//             res.json(result);
-//         })
-
-//         // console.log(rows[0]['survey_id']);
-//         // res.type('txt');
-//         // res.send(JSON.stringify(rows[0]['survey_id']));
-//     })
-// });
 
 surveys_router.post('/', (req, res) => {
     let authorID = req.body.authorID
@@ -169,14 +147,11 @@ surveys_router.post('/', (req, res) => {
                 return;
             }
             let surveyID = parseInt(rows[0]["survey_id"]);
-            // console.log(surveyID);
-            // console.log(options);
             let insert = "";
             for (i in options){
                 insert += `(${surveyID}, "${options[i]}"), `
             }
             insert = insert.slice(0, -2);
-            // console.log(insert)
             connection.query(`INSERT INTO survey_options (survey_id, description) VALUES ${insert}`, (err, rows, fileds) => {
                 if (err) {
                     console.log(err);
