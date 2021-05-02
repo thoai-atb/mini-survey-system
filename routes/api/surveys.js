@@ -109,10 +109,14 @@ surveys_router.get('/', (req, res) => {
                 result.options = rows;
                 connection.query(`SELECT survey_options.* FROM survey_options INNER JOIN user_answers 
                 ON survey_options.option_id = user_answers.option_id 
-                WHERE user_answers.user_id = 3 AND user_answers.survey_id = 11`, (err, rows, fields) => {
+                WHERE user_answers.user_id = ${userID} AND user_answers.survey_id = ${surveyID}`, (err, rows, fields) => {
                     if (err) {
                         console.log(err);
                         res.status(400).json({msg: "Bad Request."});
+                        return;
+                    }
+                    if (rows.length == 0){
+                        res.json(result);
                         return;
                     }
                     result.answer = {option_id: rows[0].option_id, description: rows[0].description};
