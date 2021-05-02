@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from 'react'
-import BrowseSurvey from './BrowseSurvey'
 import './Browse.css'
+import BrowseSurvey from './BrowseSurvey'
+import { useAuth } from '../../contexts/AuthContext'
 
 const Browse = () => {
     const [surveys, setSurveys] = useState(null)
+    const { currentUserID } = useAuth()
     
     useEffect(() => {
         const loadSurvey = async () => {
-            const res = await fetch('/api/surveys/all')
+            const url = new URL('/api/surveys/', window.location)
+            if (currentUserID !== null)
+                url.searchParams.append('userID', currentUserID)
+            const res = await fetch(url)
             const data = await res.json()
             setSurveys(data)
         }
         loadSurvey()
-    }, [])
+    }, [currentUserID])
 
     return (
         <div className='browse'>

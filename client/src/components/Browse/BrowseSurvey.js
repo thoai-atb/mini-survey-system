@@ -13,10 +13,11 @@ export default function BrowseSurvey({surveyID, title, author, date}) {
 
     return (
         <div onClick={goToSurvey} className='browse-survey'>
-            <div className="survey-title">{title}</div>
-            <div className="surver-footer">
-                <div className="survey-date-info">{formatDate(date)}</div>
-                <div className="survey-author-info">{author}</div>
+            <div className="browse-survey-title">{title}</div>
+            <div className="survey-done-indicator">Answered</div>
+            <div className="browse-surver-footer">
+                <div className="browse-survey-date-info">{formatDate(date)}</div>
+                <div className="browse-survey-author-info">{author}</div>
             </div>
         </div>
     )

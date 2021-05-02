@@ -74,6 +74,8 @@ export function AuthProvider({ children }) {
         }
         if (currentUser)
             fetchUserID()
+        else 
+            setCurrentUserID(null)
     }, [currentUser])
 
     const value = {

@@ -1,20 +1,47 @@
 import React, { useState, useEffect } from 'react'
 import formatDate from '../../utils/DateFormat'
+import { useAuth } from '../../contexts/AuthContext'
 import './Survey.css'
+import SurveyOption from './SurveyOption'
 
 export default function Survey({match}) {
 
     const [survey, setSurvey] = useState(null)
+    const {currentUserID} = useAuth()
 
     useEffect(() => {
         const fetchSurvey = async () => {
-            const res = await fetch(`/api/surveys/${match.params.id}`)
+            const url = new URL('/api/surveys/', window.location)
+            url.searchParams.append('surveyID', match.params.id)
+            if(currentUserID !== null)
+                url.searchParams.append('userID', currentUserID)
+            const res = await fetch(url)
             const data = await res.json()
             console.log(data)
             setSurvey(data)
         }
         fetchSurvey()
-    }, [match])
+    }, [match, currentUserID])
+
+    const submitOption = (optionID) => {
+        const fetchSubmit = async () => {
+            const res = await fetch(`/api/user_answers/`, {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userID: currentUserID,
+                    surveyID: survey.survey_id,
+                    optionID: optionID
+                })
+            })
+            console.log(res)
+        }
+
+        if(currentUserID)
+            fetchSubmit()
+    }
 
     return (
         <div className="txt-ctr">
@@ -27,11 +54,7 @@ export default function Survey({match}) {
                             <h3>🖋 Choose one of the followings:</h3>
                             {
                                 survey.options.map((option, index) => {
-                                    return (
-                                        <div className="survey-option" key={index}>
-                                            {option.description}
-                                        </div>
-                                    )
+                                    return <SurveyOption option={option} submitFunc={submitOption} key={index} />
                                 })
                             }
                             <p className='author-date-info'>by {survey.author} on {formatDate(new Date(survey.time))}</p>

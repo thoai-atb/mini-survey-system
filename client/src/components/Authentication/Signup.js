@@ -38,7 +38,7 @@ const Signup = () => {
         let newUser = {
             email: emailRef.current.value,
             username: nameRef.current.value,
-            user_token: uid
+            userToken: uid
         }
         await fetch('/api/users', {
             method: 'POST',
