@@ -38,8 +38,13 @@ surveys_router.get('/', (req, res) => {
         ON surveys.author_id = users.user_id WHERE survey_id = ${surveyID}`, (err, rows, fields) => {
             if (err) {
                 console.log(err);
-                res.status(400).json({msg: "Bad Request."})
-            } 
+                res.status(400).json({msg: "Bad Request."});
+                return;
+            }
+            if (rows.length == 0){
+                res.status(400).json({msg :"Could not find survey given the surveyID."});
+                return;
+            }
             let result = rows[0];
             connection.query(`SELECT * FROM survey_options WHERE survey_id = ${surveyID}`, (err, rows, fields) => {
                 if (err) {
@@ -54,27 +59,44 @@ surveys_router.get('/', (req, res) => {
     };
 
     if (surveyID == null && userID != null) {
-        connection.query(`SELECT surveys.*, users.username AS author, survey_options.description AS answer 
-        FROM surveys INNER JOIN user_answers INNER JOIN survey_options INNER JOIN users 
-        ON user_answers.option_id = survey_options.option_id AND surveys.survey_id = user_answers.survey_id AND surveys.author_id = users.user_id 
-        WHERE user_answers.user_id = ${userID}`, (err, rows, fields) => {
+        connection.query(`SELECT surveys.*, users.username AS author FROM surveys INNER JOIN users ON surveys.author_id = users.user_id`, (err, rows, fields) => {
             if (err) {
                 console.log(err);
                 res.status(400).json({msg: "Bad Request."});
                 return;
             }
-            res.json(rows);
+            let results = rows;
+            connection.query(`SELECT survey_options.* FROM survey_options INNER JOIN user_answers 
+            ON survey_options.option_id = user_answers.option_id 
+            WHERE user_answers.user_id = ${userID}`, (err, rows, fields) => {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: "Bad Request."});
+                    return;
+                }
+                for (let row of rows) {
+                    for (let result of results) {
+                        if (row.survey_id == result.survey_id) {
+                            result.answer = {option_id: row.option_id, description: row.description};
+                            break;
+                        }
+                    }
+                }
+                res.json(results);
+            })
         })
     }
 
     if (surveyID != null && userID != null) {
-        connection.query(`SELECT surveys.*, users.username AS author, survey_options.description AS answer 
-        FROM surveys INNER JOIN user_answers INNER JOIN survey_options INNER JOIN users 
-        ON user_answers.option_id = survey_options.option_id AND surveys.survey_id = user_answers.survey_id AND surveys.author_id = users.user_id 
-        WHERE surveys.survey_id = ${surveyID} AND user_answers.user_id = ${userID}`, (err, rows, fields) => {
+        connection.query(`SELECT surveys.*, users.username AS author FROM surveys INNER JOIN users 
+        ON surveys.author_id = users.user_id WHERE survey_id = ${surveyID}`, (err, rows, fields) => {
             if (err) {
                 console.log(err);
                 res.status(400).json({msg: "Bad Request."});
+                return;
+            }
+            if (rows.length == 0){
+                res.status(400).json({msg :"Could not find survey given the surveyID."});
                 return;
             }
             let result = rows[0];
@@ -85,7 +107,18 @@ surveys_router.get('/', (req, res) => {
                     return;
                 }
                 result.options = rows;
-                res.json(result);
+                connection.query(`SELECT survey_options.* FROM survey_options INNER JOIN user_answers 
+                ON survey_options.option_id = user_answers.option_id 
+                WHERE user_answers.user_id = 3 AND user_answers.survey_id = 11`, (err, rows, fields) => {
+                    if (err) {
+                        console.log(err);
+                        res.status(400).json({msg: "Bad Request."});
+                        return;
+                    }
+                    result.answer = {option_id: rows[0].option_id, description: rows[0].description};
+                    res.json(result);
+                })
+
             })
         })
     }
