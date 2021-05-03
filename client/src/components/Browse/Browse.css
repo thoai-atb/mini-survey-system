@@ -81,3 +81,7 @@
     color: var(--color4);
     font-style: italic;
 }
+
+.browse-survey-answers-info {
+    float: right;
+}
