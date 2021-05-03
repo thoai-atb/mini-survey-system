@@ -62,15 +62,21 @@ export function AuthProvider({ children }) {
                 because the back-end is creating the new user.
                 Therefore we need to create a loop to constantly check if it is present.
             */
-            while (res.status !== 200) {
+            for(let i = 0; i<10; i++) {
+                if (res.status === 200) {
+                    if(i > 0) console.log('User ID found')
+                    break
+                }
                 console.log('Could not get user ID, refetching...')
                 await new Promise(r => setTimeout(r, 100))
                 res = await fetch(`/api/users/tokentoid/${currentUser.uid}`)
-                if (res.status === 200)
-                    console.log('User ID found')
             }
-            const data = await res.json()
-            setCurrentUserID(data.user_id)
+            if (res.status === 200) {
+                const data = await res.json()
+                setCurrentUserID(data.user_id)
+                return
+            }
+            setCurrentUser(null)
         }
         if (currentUser)
             fetchUserID()

@@ -7,6 +7,7 @@ import SurveyOption from './SurveyOption'
 export default function Survey({match}) {
 
     const [survey, setSurvey] = useState(null)
+    const [answerID, setAnswerID] = useState(null)
     const {currentUserID} = useAuth()
 
     useEffect(() => {
@@ -17,7 +18,8 @@ export default function Survey({match}) {
                 url.searchParams.append('userID', currentUserID)
             const res = await fetch(url)
             const data = await res.json()
-            console.log(data)
+            if(data.answer)
+                setAnswerID(data.answer.option_id)
             setSurvey(data)
         }
         fetchSurvey()
@@ -25,7 +27,7 @@ export default function Survey({match}) {
 
     const submitOption = (optionID) => {
         const fetchSubmit = async () => {
-            const res = await fetch(`/api/user_answers/`, {
+            await fetch(`/api/user_answers/`, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'
@@ -36,11 +38,10 @@ export default function Survey({match}) {
                     optionID: optionID
                 })
             })
-            console.log(res)
         }
-
         if(currentUserID)
             fetchSubmit()
+        setAnswerID(optionID)
     }
 
     return (
@@ -54,7 +55,7 @@ export default function Survey({match}) {
                             <h3>🖋 Choose one of the followings:</h3>
                             {
                                 survey.options.map((option, index) => {
-                                    return <SurveyOption option={option} submitFunc={submitOption} key={index} />
+                                    return <SurveyOption option={option} checked={option.option_id === answerID} submitFunc={submitOption} key={index} />
                                 })
                             }
                             <p className='author-date-info'>by {survey.author} on {formatDate(new Date(survey.time))}</p>
