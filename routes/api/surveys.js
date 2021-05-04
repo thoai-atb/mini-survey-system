@@ -1,15 +1,29 @@
 const express = require('express')
 const surveys_router = express.Router()
-const connection = require('./mysql_connect');
+const pool = require('./mysql_connect');
 
 surveys_router.get('/desc', (req, res) => {
-    connection.query('DESC surveys', (err, rows, fields) => {
+    pool.getConnection((err, connection) => {
         if (err) {
             console.log(err);
-            res.status(400).json({msg: "Bad Request."})
-        } 
-        else res.json(rows);
-    })
+            res.status(500).json({msg: "Internal server error: Could not get connection."});
+            return;
+        }
+        connection.query('DESC surveys', (err, rows, fields) => {
+            if (err) {
+                console.log(err);
+                res.status(400).json({msg: "Bad Request."});
+                return;
+            }
+            res.json(rows);
+            connection.release();
+            if (err) {
+                console.log(err);
+                res.status(500).json({msg: "Internal server error: Could not close connection."});
+                return;
+            }
+        })
+    }); 
 });
 
 
@@ -22,130 +36,174 @@ surveys_router.get('/', (req, res) => {
     let surveyID = req.query.surveyID;
     let userID = req.query.userID;
 
-    if (surveyID == null && userID == null) {
-        connection.query(`SELECT surveys.*, users.username AS author FROM surveys INNER JOIN users ON surveys.author_id = users.user_id`, (err, rows, fields) => {
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.log(err);
+            res.status(500).json({msg: "Internal server error: Could not get connection."});
+            return;
+        }
+        if (surveyID == null && userID == null) {
+            connection.query(`SELECT surveys.*, users.username AS author FROM surveys INNER JOIN users ON surveys.author_id = users.user_id`, (err, rows, fields) => {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: "Bad Request."});
+                    return;
+                }
+                res.json(rows);
+                if (err) {
+                    console.log(err);
+                    res.status(500).json({msg: "Internal server error: Could not close connection."});
+                    return;
+                }
+            })
+        };
+
+        if (surveyID != null && userID == null) {
+            connection.query(`SELECT surveys.*, users.username AS author FROM surveys INNER JOIN users 
+            ON surveys.author_id = users.user_id WHERE survey_id = ${surveyID}`, (err, rows, fields) => {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: "Bad Request."});
+                    return;
+                }
+                if (rows.length == 0){
+                    res.status(400).json({msg :"Could not find survey given the surveyID."});
+                    return;
+                }
+                let result = rows[0];
+                connection.query(`SELECT * FROM survey_options WHERE survey_id = ${surveyID}`, (err, rows, fields) => {
+                    if (err) {
+                        console.log(err);
+                        res.status(400).json({msg: "Bad Request."});
+                        return;
+                    }
+                    result.options = rows;
+                    res.json(result);
+                    if (err) {
+                        console.log(err);
+                        res.status(500).json({msg: "Internal server error: Could not close connection."});
+                        return;
+                    }
+                })
+            })
+        };
+
+        if (surveyID == null && userID != null) {
+            connection.query(`SELECT surveys.*, users.username AS author FROM surveys INNER JOIN users ON surveys.author_id = users.user_id`, (err, rows, fields) => {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: "Bad Request."});
+                    return;
+                }
+                let results = rows;
+                connection.query(`SELECT survey_options.* FROM survey_options INNER JOIN user_answers 
+                ON survey_options.option_id = user_answers.option_id 
+                WHERE user_answers.user_id = ${userID}`, (err, rows, fields) => {
+                    if (err) {
+                        console.log(err);
+                        res.status(400).json({msg: "Bad Request."});
+                        return;
+                    }
+                    for (let row of rows) {
+                        for (let result of results) {
+                            if (row.survey_id == result.survey_id) {
+                                result.answer = {option_id: row.option_id, description: row.description};
+                                break;
+                            }
+                        }
+                    }
+                    res.json(results);
+                    if (err) {
+                        console.log(err);
+                        res.status(500).json({msg: "Internal server error: Could not close connection."});
+                        return;
+                    }
+                })
+            })
+        }
+
+        if (surveyID != null && userID != null) {
+            connection.query(`SELECT surveys.*, users.username AS author FROM surveys INNER JOIN users 
+            ON surveys.author_id = users.user_id WHERE survey_id = ${surveyID}`, (err, rows, fields) => {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: "Bad Request."});
+                    return;
+                }
+                if (rows.length == 0){
+                    res.status(400).json({msg :"Could not find survey given the surveyID."});
+                    return;
+                }
+                let result = rows[0];
+                connection.query(`SELECT * FROM survey_options WHERE survey_id = ${surveyID}`, (err, rows, fields) => {
+                    if (err) {
+                        console.log(err);
+                        res.status(400).json({msg: "Bad Request."});
+                        return;
+                    }
+                    result.options = rows;
+                    connection.query(`SELECT survey_options.* FROM survey_options INNER JOIN user_answers 
+                    ON survey_options.option_id = user_answers.option_id 
+                    WHERE user_answers.user_id = ${userID} AND user_answers.survey_id = ${surveyID}`, (err, rows, fields) => {
+                        if (err) {
+                            console.log(err);
+                            res.status(400).json({msg: "Bad Request."});
+                            return;
+                        }
+                        if (rows.length == 0){
+                            res.json(result);
+                            if (err) {
+                                console.log(err);
+                                res.status(500).json({msg: "Internal server error: Could not close connection."});
+                                return;
+                            }
+                        }
+                        result.answer = {option_id: rows[0].option_id, description: rows[0].description};
+                        res.json(result);
+                        if (err) {
+                            console.log(err);
+                            res.status(500).json({msg: "Internal server error: Could not close connection."});
+                            return;
+                        }
+                    })
+                })
+            })
+        }
+    }); 
+});
+
+surveys_router.get('/statistics/:surveyID', (req, res) => {
+    let surveyID = req.params.surveyID
+
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.log(err);
+            res.status(500).json({msg: "Internal server error: Could not get connection."});
+            return;
+        }
+        connection.query(`SELECT t.option_id, t.answer_count, t.answer_count/surveys.total_answered*100 AS percentage
+        FROM
+            (SELECT survey_options.survey_id, survey_options.option_id, COUNT(user_answers.option_id) AS answer_count
+            FROM survey_options LEFT JOIN user_answers
+            ON survey_options.option_id = user_answers.option_id
+            WHERE survey_options.survey_id = ${surveyID}
+            GROUP BY survey_options.option_id) 
+        as t INNER JOIN surveys
+        WHERE t.survey_id = surveys.survey_id`, (err, rows, fields) => {
             if (err) {
                 console.log(err);
                 res.status(400).json({msg: "Bad Request."});
                 return;
             }
             res.json(rows);
-        })
-    };
-
-    if (surveyID != null && userID == null) {
-        connection.query(`SELECT surveys.*, users.username AS author FROM surveys INNER JOIN users 
-        ON surveys.author_id = users.user_id WHERE survey_id = ${surveyID}`, (err, rows, fields) => {
+            connection.release();
             if (err) {
                 console.log(err);
-                res.status(400).json({msg: "Bad Request."});
+                res.status(500).json({msg: "Internal server error: Could not close connection."});
                 return;
             }
-            if (rows.length == 0){
-                res.status(400).json({msg :"Could not find survey given the surveyID."});
-                return;
-            }
-            let result = rows[0];
-            connection.query(`SELECT * FROM survey_options WHERE survey_id = ${surveyID}`, (err, rows, fields) => {
-                if (err) {
-                    console.log(err);
-                    res.status(400).json({msg: "Bad Request."});
-                    return;
-                }
-                result.options = rows;
-                res.json(result);
-            })
         })
-    };
-
-    if (surveyID == null && userID != null) {
-        connection.query(`SELECT surveys.*, users.username AS author FROM surveys INNER JOIN users ON surveys.author_id = users.user_id`, (err, rows, fields) => {
-            if (err) {
-                console.log(err);
-                res.status(400).json({msg: "Bad Request."});
-                return;
-            }
-            let results = rows;
-            connection.query(`SELECT survey_options.* FROM survey_options INNER JOIN user_answers 
-            ON survey_options.option_id = user_answers.option_id 
-            WHERE user_answers.user_id = ${userID}`, (err, rows, fields) => {
-                if (err) {
-                    console.log(err);
-                    res.status(400).json({msg: "Bad Request."});
-                    return;
-                }
-                for (let row of rows) {
-                    for (let result of results) {
-                        if (row.survey_id == result.survey_id) {
-                            result.answer = {option_id: row.option_id, description: row.description};
-                            break;
-                        }
-                    }
-                }
-                res.json(results);
-            })
-        })
-    }
-
-    if (surveyID != null && userID != null) {
-        connection.query(`SELECT surveys.*, users.username AS author FROM surveys INNER JOIN users 
-        ON surveys.author_id = users.user_id WHERE survey_id = ${surveyID}`, (err, rows, fields) => {
-            if (err) {
-                console.log(err);
-                res.status(400).json({msg: "Bad Request."});
-                return;
-            }
-            if (rows.length == 0){
-                res.status(400).json({msg :"Could not find survey given the surveyID."});
-                return;
-            }
-            let result = rows[0];
-            connection.query(`SELECT * FROM survey_options WHERE survey_id = ${surveyID}`, (err, rows, fields) => {
-                if (err) {
-                    console.log(err);
-                    res.status(400).json({msg: "Bad Request."});
-                    return;
-                }
-                result.options = rows;
-                connection.query(`SELECT survey_options.* FROM survey_options INNER JOIN user_answers 
-                ON survey_options.option_id = user_answers.option_id 
-                WHERE user_answers.user_id = ${userID} AND user_answers.survey_id = ${surveyID}`, (err, rows, fields) => {
-                    if (err) {
-                        console.log(err);
-                        res.status(400).json({msg: "Bad Request."});
-                        return;
-                    }
-                    if (rows.length == 0){
-                        res.json(result);
-                        return;
-                    }
-                    result.answer = {option_id: rows[0].option_id, description: rows[0].description};
-                    res.json(result);
-                })
-
-            })
-        })
-    }
-});
-
-surveys_router.get('/statistics/:surveyID', (req, res) => {
-    let surveyID = req.params.surveyID
-    connection.query(`SELECT t.option_id, t.answer_count, t.answer_count/surveys.total_answered*100 AS percentage
-    FROM
-        (SELECT survey_options.survey_id, survey_options.option_id, COUNT(user_answers.option_id) AS answer_count
-        FROM survey_options LEFT JOIN user_answers
-        ON survey_options.option_id = user_answers.option_id
-        WHERE survey_options.survey_id = ${surveyID}
-        GROUP BY survey_options.option_id) 
-    as t INNER JOIN surveys
-    WHERE t.survey_id = surveys.survey_id`, (err, rows, fields) => {
-        if (err) {
-            console.log(err);
-            res.status(400).json({msg: "Bad Request."});
-            return;
-        }
-        res.json(rows);
-    })
+    }); 
 })
 
 surveys_router.post('/', (req, res) => {
@@ -154,33 +212,46 @@ surveys_router.post('/', (req, res) => {
     let description = req.body.description
     let options = req.body.options
     
-    connection.query(`INSERT INTO surveys (title, description, author_id) VALUES ("${title}", "${description}", "${authorID}");`, (err, rows, fields) => {
+    pool.getConnection((err, connection) => {
         if (err) {
             console.log(err);
-            res.status(400).json({msg: "Bad Request."});
+            res.status(500).json({msg: "Internal server error: Could not get connection."});
             return;
         }
-        connection.query(`SELECT survey_id FROM surveys WHERE title = "${title}" AND description = "${description}" AND author_id = ${authorID}`, (err, rows, fields) => {
+        connection.query(`INSERT INTO surveys (title, description, author_id) VALUES ("${title}", "${description}", "${authorID}");`, (err, rows, fields) => {
             if (err) {
                 console.log(err);
                 res.status(400).json({msg: "Bad Request."});
                 return;
             }
-            let surveyID = parseInt(rows[0]["survey_id"]);
-            let insert = "";
-            for (i in options){
-                insert += `(${surveyID}, "${options[i]}"), `
-            }
-            insert = insert.slice(0, -2);
-            connection.query(`INSERT INTO survey_options (survey_id, description) VALUES ${insert}`, (err, rows, fileds) => {
+            connection.query(`SELECT survey_id FROM surveys WHERE title = "${title}" AND description = "${description}" AND author_id = ${authorID}`, (err, rows, fields) => {
                 if (err) {
                     console.log(err);
                     res.status(400).json({msg: "Bad Request."});
                     return;
                 }
-                res.json({msg: "Succeeded."});
+                let surveyID = parseInt(rows[0]["survey_id"]);
+                let insert = "";
+                for (i in options){
+                    insert += `(${surveyID}, "${options[i]}"), `
+                }
+                insert = insert.slice(0, -2);
+                connection.query(`INSERT INTO survey_options (survey_id, description) VALUES ${insert}`, (err, rows, fileds) => {
+                    if (err) {
+                        console.log(err);
+                        res.status(400).json({msg: "Bad Request."});
+                        return;
+                    }
+                    res.json({msg: "Succeeded."});
+                    connection.release();
+                    if (err) {
+                        console.log(err);
+                        res.status(500).json({msg: "Internal server error: Could not close connection."});
+                        return;
+                    }
+                })
             })
-        })
+        });
     });
 })
 

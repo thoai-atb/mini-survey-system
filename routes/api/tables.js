@@ -1,22 +1,29 @@
-const express = require('express')
-const table_router = express.Router()
-const connection = require('./mysql_connect')
+const express = require('express');
+const pool = require('./mysql_connect');
+const table_router = express.Router();
 
 table_router.get('/', (req, res) => {
-    connection.query('SHOW TABLES', (err, rows, fields) => {
-        if (err) console.log(err)
-
-        // Use this if you do not need to covert
-        // resString = "";
-        // rows.forEach(row => {
-        //     resString += `<p>${row.Tables_in_mini_survey_system}</p>`;
-        // });
-        // res.send(resString);
-
-        // Normal response is an array of JSON object.
-        res.json(rows);
-    })
-    // connection.end()
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.log(err);
+            res.status(500).json({msg: "Internal server error: Could not get connection."});
+            return;
+        }
+        connection.query('SHOW TABLES', (err, rows, fields) => {
+            if (err) {
+                console.log(err);
+                res.status(500).json({msg: "Internal server error."});
+                return;
+            }
+            res.send(rows);
+            connection.release();
+            if (err) {
+                console.log(err);
+                res.status(500).json({msg: "Internal server error: Could not close connection."});
+                return;
+            }
+        })
+    });
 });
 
 module.exports = table_router;
