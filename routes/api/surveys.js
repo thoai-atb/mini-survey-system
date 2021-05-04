@@ -50,6 +50,7 @@ surveys_router.get('/', (req, res) => {
                     return;
                 }
                 res.json(rows);
+                connection.release();
                 if (err) {
                     console.log(err);
                     res.status(500).json({msg: "Internal server error: Could not close connection."});
@@ -79,6 +80,7 @@ surveys_router.get('/', (req, res) => {
                     }
                     result.options = rows;
                     res.json(result);
+                    connection.release();
                     if (err) {
                         console.log(err);
                         res.status(500).json({msg: "Internal server error: Could not close connection."});
@@ -113,6 +115,7 @@ surveys_router.get('/', (req, res) => {
                         }
                     }
                     res.json(results);
+                    connection.release();
                     if (err) {
                         console.log(err);
                         res.status(500).json({msg: "Internal server error: Could not close connection."});
@@ -152,14 +155,17 @@ surveys_router.get('/', (req, res) => {
                         }
                         if (rows.length == 0){
                             res.json(result);
+                            connection.release();
                             if (err) {
                                 console.log(err);
                                 res.status(500).json({msg: "Internal server error: Could not close connection."});
                                 return;
                             }
+                            return;
                         }
                         result.answer = {option_id: rows[0].option_id, description: rows[0].description};
                         res.json(result);
+                        connection.release();
                         if (err) {
                             console.log(err);
                             res.status(500).json({msg: "Internal server error: Could not close connection."});
