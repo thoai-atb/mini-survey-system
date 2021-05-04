@@ -66,10 +66,17 @@ CREATE TABLE IF NOT EXISTS `user_answers` (
   `option_id` int(11) UNSIGNED NOT NULL,
   `time` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`answer_id`),
+  UNIQUE KEY `unique_user_answers` (`user_id`,`survey_id`),
   KEY `user_answers_ibfk_1` (`user_id`),
   KEY `user_answers_ibfk_2` (`survey_id`),
   KEY `user_answers_ibfk_3` (`option_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+DROP TRIGGER IF EXISTS `decrease_total_answered`;
+DELIMITER $$
+CREATE TRIGGER `decrease_total_answered` AFTER DELETE ON `user_answers` FOR EACH ROW UPDATE surveys 
+SET surveys.total_answered = surveys.total_answered - 1 WHERE surveys.survey_id = OLD.survey_id
+$$
+DELIMITER ;
 DROP TRIGGER IF EXISTS `increase_total_answered`;
 DELIMITER $$
 CREATE TRIGGER `increase_total_answered` AFTER INSERT ON `user_answers` FOR EACH ROW UPDATE surveys 
