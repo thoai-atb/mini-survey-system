@@ -128,6 +128,26 @@ surveys_router.get('/', (req, res) => {
     }
 });
 
+surveys_router.get('/statistics/:surveyID', (req, res) => {
+    let surveyID = req.params.surveyID
+    connection.query(`SELECT t.option_id, t.answer_count, t.answer_count/surveys.total_answered*100 AS percentage
+    FROM
+        (SELECT survey_options.survey_id, survey_options.option_id, COUNT(user_answers.option_id) AS answer_count
+        FROM survey_options LEFT JOIN user_answers
+        ON survey_options.option_id = user_answers.option_id
+        WHERE survey_options.survey_id = ${surveyID}
+        GROUP BY survey_options.option_id) 
+    as t INNER JOIN surveys
+    WHERE t.survey_id = surveys.survey_id`, (err, rows, fields) => {
+        if (err) {
+            console.log(err);
+            res.status(400).json({msg: "Bad Request."});
+            return;
+        }
+        res.json(rows);
+    })
+})
+
 surveys_router.post('/', (req, res) => {
     let authorID = req.body.authorID
     let title = req.body.title
