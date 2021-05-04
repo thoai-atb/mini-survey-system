@@ -11,17 +11,7 @@ export default function Survey({match}) {
     const {currentUserID} = useAuth()
     const [optionResults, setOptionResults] = useState(null)
 
-    const fetchOptionResults = async () => {
-        const res = await fetch(`/api/surveys/statistics/${survey.survey_id}`)
-        const data = await res.json()
-        const map = {}
-        for(let option of data)
-            map[option.option_id] = option
-        setOptionResults(map)
-    }
-
     const submitOption = async (optionID) => {
-
         const fetchSubmit = async () => {
             await fetch(`/api/user_answers/`, {
                 method: 'POST',
@@ -35,16 +25,12 @@ export default function Survey({match}) {
                 })
             })
         }
-
-        setAnswerID(optionID)
-
-        if(currentUserID) {
+        if(currentUserID)
             await fetchSubmit()
-            await fetchOptionResults()
-        } else if (!optionResults)
-            await fetchOptionResults()
+        setAnswerID(optionID)
     }
 
+    // FIRST FETCH TO GET THE WHOLE SURVEY WITH OPTIONS
     useEffect(() => {
         const fetchSurvey = async () => {
             const url = new URL('/api/surveys/', window.location)
@@ -53,12 +39,31 @@ export default function Survey({match}) {
                 url.searchParams.append('userID', currentUserID)
             const res = await fetch(url)
             const data = await res.json()
-            if(data.answer)
-                setAnswerID(data.answer.option_id)
             setSurvey(data)
         }
         fetchSurvey()
     }, [match, currentUserID])
+
+    // SECOND FETCH TO GET THE ANSWER IF EXISTS
+    useEffect(() => {
+        if(survey && survey.answer)
+            setAnswerID(survey.answer.option_id)
+    }, [survey])
+
+    // THIRD FETCH TO GET THE STATISTIC OF THE OPTIONS IF AN ANSWER CHANGES
+    useEffect(() => {
+        const fetchOptionResults = async () => {
+            console.log('fetching...')
+            const res = await fetch(`/api/surveys/statistics/${survey.survey_id}`)
+            const data = await res.json()
+            const map = {}
+            for(let option of data)
+                map[option.option_id] = option
+            setOptionResults(map)
+        }
+        if (answerID)
+            fetchOptionResults()
+    }, [answerID, survey])
 
     return (
         <div className="txt-ctr">
