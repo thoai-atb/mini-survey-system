@@ -40,6 +40,12 @@
     border: 5px solid var(--color0);
 }
 
+.survey-option-stats {
+    display: inline;
+    float: right;
+    font-style: italic;
+}
+
 
 .survey-card .author-date-info {
     color: gray;

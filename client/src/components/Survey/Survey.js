@@ -9,6 +9,41 @@ export default function Survey({match}) {
     const [survey, setSurvey] = useState(null)
     const [answerID, setAnswerID] = useState(null)
     const {currentUserID} = useAuth()
+    const [optionResults, setOptionResults] = useState(null)
+
+    const fetchOptionResults = async () => {
+        const res = await fetch(`/api/surveys/statistics/${survey.survey_id}`)
+        const data = await res.json()
+        const map = {}
+        for(let option of data)
+            map[option.option_id] = option
+        setOptionResults(map)
+    }
+
+    const submitOption = async (optionID) => {
+
+        const fetchSubmit = async () => {
+            await fetch(`/api/user_answers/`, {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userID: currentUserID,
+                    surveyID: survey.survey_id,
+                    optionID: optionID
+                })
+            })
+        }
+
+        setAnswerID(optionID)
+
+        if(currentUserID) {
+            await fetchSubmit()
+            await fetchOptionResults()
+        } else if (!optionResults)
+            await fetchOptionResults()
+    }
 
     useEffect(() => {
         const fetchSurvey = async () => {
@@ -25,25 +60,6 @@ export default function Survey({match}) {
         fetchSurvey()
     }, [match, currentUserID])
 
-    const submitOption = (optionID) => {
-        const fetchSubmit = async () => {
-            await fetch(`/api/user_answers/`, {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify({
-                    userID: currentUserID,
-                    surveyID: survey.survey_id,
-                    optionID: optionID
-                })
-            })
-        }
-        if(currentUserID)
-            fetchSubmit()
-        setAnswerID(optionID)
-    }
-
     return (
         <div className="txt-ctr">
             <div className="card survey-card card-wide">
@@ -55,7 +71,13 @@ export default function Survey({match}) {
                             <h3>🖋 Choose one of the followings:</h3>
                             {
                                 survey.options.map((option, index) => {
-                                    return <SurveyOption option={option} checked={option.option_id === answerID} submitFunc={submitOption} key={index} />
+                                    return <SurveyOption 
+                                        key={index} 
+                                        option={option} 
+                                        checked={option.option_id === answerID} 
+                                        stats={optionResults ? optionResults[option.option_id] : null} 
+                                        submitFunc={submitOption} 
+                                    />
                                 })
                             }
                             <p className='author-date-info'>by {survey.author} on {formatDate(new Date(survey.time))}</p>

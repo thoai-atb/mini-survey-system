@@ -1,7 +1,6 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import formatDate from '../../utils/DateFormat'
-import Survey from '../Survey/Survey'
 import './Browse.css'
 
 export default function BrowseSurvey({survey}) {
