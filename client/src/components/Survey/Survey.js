@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import formatDate from '../../utils/DateFormat'
 import { useAuth } from '../../contexts/AuthContext'
 import './Survey.css'
@@ -10,6 +10,8 @@ export default function Survey({match}) {
     const [answerID, setAnswerID] = useState(null)
     const {currentUserID} = useAuth()
     const [optionResults, setOptionResults] = useState(null)
+
+    const previous = useRef({optionResults})
 
     const submitOption = async (optionID) => {
         const fetchSubmit = async () => {
@@ -29,6 +31,11 @@ export default function Survey({match}) {
             await fetchSubmit()
         setAnswerID(optionID)
     }
+
+    // ALWAYS UPDATE previous VARIABLE
+    useEffect(() => {
+        previous.current = {optionResults}
+    })
 
     // FIRST FETCH TO GET THE WHOLE SURVEY WITH OPTIONS
     useEffect(() => {
@@ -53,7 +60,6 @@ export default function Survey({match}) {
     // THIRD FETCH TO GET THE STATISTIC OF THE OPTIONS IF AN ANSWER CHANGES
     useEffect(() => {
         const fetchOptionResults = async () => {
-            console.log('fetching...')
             const res = await fetch(`/api/surveys/statistics/${survey.survey_id}`)
             const data = await res.json()
             const map = {}
@@ -61,9 +67,12 @@ export default function Survey({match}) {
                 map[option.option_id] = option
             setOptionResults(map)
         }
-        if (answerID)
-            fetchOptionResults()
-    }, [answerID, survey])
+        if (!answerID)
+            return
+        if (!currentUserID && previous.current.optionResults)
+            return
+        fetchOptionResults()
+    }, [answerID, survey, currentUserID])
 
     return (
         <div className="txt-ctr">
