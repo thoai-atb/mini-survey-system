@@ -3,10 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 05, 2021 at 09:16 AM
+-- Generation Time: May 05, 2021 at 09:25 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.3.26
 
+SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -108,6 +109,7 @@ INSERT INTO `user_answers` (`answer_id`, `user_id`, `survey_id`, `option_id`, `t
 (26, 4, 3, 7, '2021-05-05 09:42:29'),
 (27, 4, 2, 4, '2021-05-05 09:42:39'),
 (28, 8, 1, 1, '2021-05-05 09:45:09');
+SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
