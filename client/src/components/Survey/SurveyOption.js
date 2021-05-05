@@ -13,7 +13,7 @@ export default function SurveyOption({option, submitFunc, checked, stats}) {
             { 
                 stats && (
                     <div className='survey-option-stats'>
-                       {stats.percentage}% ({stats.answer_count})
+                       {stats.percentage.toFixed(1)}% ({stats.answer_count})
                     </div>
                 )
             }
