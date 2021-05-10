@@ -213,8 +213,9 @@ surveys_router.get('/statistics/:surveyID', (req, res) => {
 })
 
 surveys_router.get('/search/', (req, res) => {
-    let q = req.body.q;
-    let userID = req.body.userID;
+    let q = req.query.q;
+    q = decodeURIComponent(q);
+    let userID = req.query.userID;
 
     if (q == null) {
         res.status(400).json({msg: "Bad request."});
@@ -242,7 +243,6 @@ surveys_router.get('/search/', (req, res) => {
                 }
                 return;
             }
-            console.log("Here");
             let results = rows;
             connection.query(`SELECT survey_options.* FROM survey_options INNER JOIN user_answers 
             ON survey_options.option_id = user_answers.option_id 
