@@ -9,9 +9,15 @@ const Home = () => {
                 <p className='welcome-heading'>Take part in one of the most interesting surveys or create your own ones</p>
             </div>
             <div className='main-area'>
-                <div className='board'>See All Surveys</div>
-                <div className='board'>Create New Surveys</div>
-                <div className='board'>About Us</div>
+                <div className='board board1'>
+                    <p className='board-title'>See All Surveys</p>
+                </div>
+                <div className='board board2'>
+                    <p className='board-title'>Create New Surveys</p>
+                </div>
+                <div className='board board3'>
+                    <p className='board-title'>About Us</p>
+                </div>
             </div>
         </div>
     )

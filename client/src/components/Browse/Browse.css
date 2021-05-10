@@ -60,6 +60,7 @@
     text-align: left;
     padding: 15px;
     transition-duration: 0.3s;
+    box-shadow: rgba(128, 128, 128, 0.349) 5px 5px;
 }
 
 .browse-survey:hover {

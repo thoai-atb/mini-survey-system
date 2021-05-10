@@ -30,6 +30,7 @@ body {
     /* width: 600px; */
     max-width: 80%;
     border-radius: 20px 40px;
+    box-shadow: rgba(0, 0, 0, 0.205) 5px 5px;
 }
 
 .card-wide {

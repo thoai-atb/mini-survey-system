@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Krona+One&display=swap');
 
 .welcome-block {
@@ -28,4 +29,29 @@
     margin: 20px 20px 20px 20px;
     width: 20%;
     border-radius: 20px 40px;
+    box-shadow: rgba(128, 128, 128, 0.384) 10px 10px;
+}
+
+.board1 {
+    background-color: rgb(217, 160, 255);
+    border: 2px solid purple;
+}
+
+.board2 {
+    background-color: rgb(167, 255, 167);
+    border: 2px solid green;
+}
+
+.board3 {
+    background-color: rgb(255, 166, 166);
+    border: 2px solid red;
+}
+
+.board-title {
+    font-size: 30px;
+    padding: 0px;
+    margin: 0px;
+    font-family: 'Open Sans', sans-serif;
+    color: var(--color6);
+    font-weight: bold;
 }

@@ -35,6 +35,7 @@ export default function Profile() {
             <div className="card card-wide">
                 <h1>Profile</h1>
                 <p>🖐 Hi, {username}, Welcome to your profile!</p>
+                <p><strong>Name:</strong> {username}</p>
                 <p><strong>Email:</strong> {currentUser.email}</p> 
                 <button onClick={logout}>Log Out</button>
             </div>
