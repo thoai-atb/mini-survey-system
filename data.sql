@@ -1,12 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 5.0.4
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: May 05, 2021 at 09:25 AM
--- Server version: 10.4.17-MariaDB
--- PHP Version: 7.3.26
-
 SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +9,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `mini_survey_system`
---
-
---
--- Dumping data for table `surveys`
---
+USE `mini_survey_system`;
 
 INSERT INTO `surveys` (`survey_id`, `title`, `description`, `author_id`, `time`, `total_viewed`, `total_answered`) VALUES
 (1, 'Are you god?', 'A religious question', 1, '2021-05-05 09:45:09', 0, 7),
@@ -34,10 +19,6 @@ INSERT INTO `surveys` (`survey_id`, `title`, `description`, `author_id`, `time`,
 (5, 'Job', 'Do you like hard job or easy job?', 4, '2021-05-05 09:41:28', 0, 4),
 (6, 'Do you watch porns', 'Normal question', 4, '2021-05-05 09:42:15', 0, 5),
 (7, 'Do you like Jesus?', '', 5, '2021-05-05 09:42:19', 0, 3);
-
---
--- Dumping data for table `survey_options`
---
 
 INSERT INTO `survey_options` (`option_id`, `survey_id`, `description`) VALUES
 (1, 1, 'Yes, everybody is god'),
@@ -62,10 +43,6 @@ INSERT INTO `survey_options` (`option_id`, `survey_id`, `description`) VALUES
 (20, 7, 'No'),
 (21, 7, 'Jesus Christmas');
 
---
--- Dumping data for table `users`
---
-
 INSERT INTO `users` (`user_id`, `email`, `username`, `user_token`) VALUES
 (1, 'surf@gmail.com', 'Surf', 'tIRVYkIxEbdfnpzAg4kUQ20RsR72'),
 (2, 'pom@gmail.com', 'Pom', '90trE6aPW7hvuLs4AOXujGNVKbK2'),
@@ -75,10 +52,6 @@ INSERT INTO `users` (`user_id`, `email`, `username`, `user_token`) VALUES
 (6, 'jimmy@gmail.com', 'Jimmy', '0OcFMdPzJSeqHeJ6zLWDBGo3Bwp1'),
 (7, 'god@gmail.com', 'God', 'HwbPWjxJvGX5lbL289ouh2Yin5A2'),
 (8, 'bush@gmail.com', 'Bush', 'FGqJE4UQaGXinizvLm3AIFXQ91f2');
-
---
--- Dumping data for table `user_answers`
---
 
 INSERT INTO `user_answers` (`answer_id`, `user_id`, `survey_id`, `option_id`, `time`) VALUES
 (1, 2, 1, 2, '2021-05-04 20:43:32'),
@@ -109,6 +82,17 @@ INSERT INTO `user_answers` (`answer_id`, `user_id`, `survey_id`, `option_id`, `t
 (26, 4, 3, 7, '2021-05-05 09:42:29'),
 (27, 4, 2, 4, '2021-05-05 09:42:39'),
 (28, 8, 1, 1, '2021-05-05 09:45:09');
+
+DELIMITER $$
+CREATE TRIGGER `decrease_total_answered` AFTER DELETE ON `user_answers` FOR EACH ROW UPDATE surveys 
+SET surveys.total_answered = surveys.total_answered - 1 WHERE surveys.survey_id = OLD.survey_id
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `increase_total_answered` AFTER INSERT ON `user_answers` FOR EACH ROW UPDATE surveys 
+SET surveys.total_answered = surveys.total_answered + 1 WHERE surveys.survey_id = NEW.survey_id
+$$
+DELIMITER ;
 SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
 

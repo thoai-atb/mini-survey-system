@@ -212,6 +212,66 @@ surveys_router.get('/statistics/:surveyID', (req, res) => {
     }); 
 })
 
+surveys_router.get('/search/', (req, res) => {
+    let q = req.body.q;
+    let userID = req.body.userID;
+
+    if (q == null) {
+        res.status(400).json({msg: "Bad request."});
+    }
+    pool.getConnection((err, connection) => {
+        if (err){
+            console.log(err);
+            res.status(500).json({msg: "Internal server error: Could not get connection."});
+            return;
+        }
+        connection.query(`SELECT surveys.*, users.username AS author FROM surveys INNER JOIN users 
+        ON surveys.author_id = users.user_id WHERE surveys.title LIKE '%${q}%'`, (err, rows, fields) => {
+            if (err){
+                console.log(err);
+                res.status(500).json({msg: "Internal server error."});
+                return;
+            }
+            if (userID == null){
+                res.json(rows);
+                connection.release();
+                if (err) {
+                    console.log(err);
+                    res.status(500).json({msg: "Internal server error: Could not close connection."});
+                    return;
+                }
+                return;
+            }
+            console.log("Here");
+            let results = rows;
+            connection.query(`SELECT survey_options.* FROM survey_options INNER JOIN user_answers 
+            ON survey_options.option_id = user_answers.option_id 
+            WHERE user_answers.user_id = ${userID}`, (err, rows, fields) => {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: "Bad Request."});
+                    return;
+                }
+                for (let row of rows) {
+                    for (let result of results) {
+                        if (row.survey_id == result.survey_id) {
+                            result.answer = {option_id: row.option_id, description: row.description};
+                            break;
+                        }
+                    }
+                }
+                res.json(results);
+                connection.release();
+                if (err) {
+                    console.log(err);
+                    res.status(500).json({msg: "Internal server error: Could not close connection."});
+                    return;
+                }
+            })
+        })
+    })
+})
+
 surveys_router.post('/', (req, res) => {
     let authorID = req.body.authorID
     let title = req.body.title
