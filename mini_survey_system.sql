@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `surveys` (
   `title` varchar(100) NOT NULL,
   `description` text NOT NULL,
   `author_id` int(11) UNSIGNED NOT NULL,
-  `time` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `time` datetime NOT NULL DEFAULT current_timestamp(),
   `total_viewed` int(11) UNSIGNED DEFAULT 0,
   `total_answered` int(11) UNSIGNED DEFAULT 0,
   PRIMARY KEY (`survey_id`),
@@ -72,18 +72,7 @@ CREATE TABLE IF NOT EXISTS `user_answers` (
   KEY `user_answers_ibfk_3` (`option_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 DROP TRIGGER IF EXISTS `decrease_total_answered`;
-DELIMITER $$
-CREATE TRIGGER `decrease_total_answered` AFTER DELETE ON `user_answers` FOR EACH ROW UPDATE surveys 
-SET surveys.total_answered = surveys.total_answered - 1 WHERE surveys.survey_id = OLD.survey_id
-$$
-DELIMITER ;
 DROP TRIGGER IF EXISTS `increase_total_answered`;
-DELIMITER $$
-CREATE TRIGGER `increase_total_answered` AFTER INSERT ON `user_answers` FOR EACH ROW UPDATE surveys 
-SET surveys.total_answered = surveys.total_answered + 1 WHERE surveys.survey_id = NEW.survey_id
-$$
-DELIMITER ;
-
 
 ALTER TABLE `comments`
   ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`survey_id`) REFERENCES `surveys` (`survey_id`) ON DELETE CASCADE ON UPDATE CASCADE,
