@@ -8,6 +8,8 @@
     --color4: rgb(27, 156, 15);
     --color5: rgb(211, 21, 94);
     --color6: #1d183d;
+
+    --card-wide-width: 600px;
 }
 
 body {
@@ -31,7 +33,7 @@ body {
 }
 
 .card-wide {
-    width: 600px;
+    width: var(--card-wide-width);
 }
 
 h2 {

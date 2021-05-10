@@ -1,0 +1,17 @@
+@import '../Browse/Browse.css';
+
+.profile-surveys {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+}
+
+.profile-survey {
+    width: var(--card-wide-width);
+}
+
+.profile-surveys-header {
+    font-size: 20px;
+    font-style: oblique;
+}
