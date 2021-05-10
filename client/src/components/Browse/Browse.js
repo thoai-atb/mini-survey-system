@@ -4,7 +4,7 @@ import BrowseSurvey from './BrowseSurvey'
 import { useAuth } from '../../contexts/AuthContext'
 
 const Browse = () => {
-    const [surveys, setSurveys] = useState(null)
+    const [surveys, setSurveys] = useState([])
     const { currentUserID } = useAuth()
     const [searchString, setSearchString] = useState()
     
@@ -47,11 +47,16 @@ const Browse = () => {
             </div>
             <div className='browse-content'>
                 {
-                    surveys && surveys.map((survey, index) => {
+                    surveys.map((survey, index) => {
                         return (
                             <BrowseSurvey key={index} survey={survey} />
                         )
                     })
+                }
+                {
+                    surveys.length === 0 && (
+                        <p className='browse-message'>No surveys found</p>
+                    )
                 }
             </div>
         </div>

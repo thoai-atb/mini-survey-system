@@ -86,3 +86,8 @@
 .browse-survey-answers-info {
     float: right;
 }
+
+.browse-content .browse-message {
+    color: gray;
+    font-style: italic;
+}
