@@ -3,6 +3,8 @@ import formatDate from '../../utils/DateFormat'
 import { useAuth } from '../../contexts/AuthContext'
 import './Survey.css'
 import SurveyOption from './SurveyOption'
+import Comments from '../Comments/Comments';
+
 
 export default function Survey({match}) {
 
@@ -99,6 +101,7 @@ export default function Survey({match}) {
                     )
                 }
             </div>
+            <Comments/>
         </div>
     )
 }
