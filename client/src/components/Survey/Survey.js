@@ -75,7 +75,6 @@ export default function Survey({match}) {
             return
         fetchOptionResults()
     }, [answerID, survey, currentUserID])
-
     return (
         <div className="txt-ctr">
             <div className="card survey-card card-wide">
@@ -101,7 +100,7 @@ export default function Survey({match}) {
                     )
                 }
             </div>
-            <Comments/>
+            <Comments survey = {survey}/>
         </div>
     )
 }

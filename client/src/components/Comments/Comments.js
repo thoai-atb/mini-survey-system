@@ -1,43 +1,49 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Comment from './Comment'
 import './Comments.css'
+import { useAuth } from '../../contexts/AuthContext'
 
 
-export default function Comments() {
-    const[comments,setComments] = useState([
-        {
-            id: 1,
-            username: 'Allah',
-            content: 'allah the god '
-        },
-        {
-            id: 2,
-            username: 'Muhammad',
-            content: 'muhammad the prophet '
-        },
-        {
-            id: 3,
-            username: 'Mustafa',
-            content: 'mustafa the great '
+export default function Comments({survey}) {
+    const[comments,setComments] = useState(null);
+    const {currentUserID} = useAuth()
+    
+    const submitComments = async () => {
+        const submitComment = async () => {
+            await fetch(`/api/comments/`, {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userID: currentUserID,
+                    surveyID: survey.survey_id,
+                    content: comments.content
+                })
+            })
         }
-    ])
-
-    const submitComment= (comment) => {
-        comments.push({
-            id: 'unkwown',
-            username: 'nwowknu',
-            content: comment.target.value,
-        }) 
-        console.log(comments)
+        if(currentUserID)
+            await submitComment()
     }
+
+    useEffect(() => {
+        const fetchComments = async () => {
+            const url = new URL('/api/comments/', window.location)
+            url.searchParams.append('surveyID', survey.survey_id)
+            const res = await fetch(url)
+            const data = await res.json()
+            setComments(data)
+        }
+        fetchComments()
+    })
 
     return(
         <div class='comments-container'>
             <h3>Comments</h3>
-            <form className = "comment-input-container" onSubmit={submitComment}>
+            <div className = "comment-input-container" onClick = {currentUserID? submitComments : null}>
                 <input type ="text area" className="comment-box " placeholder="Write a comment..."/>
-                <input type = "submit" className="add-comment-btn " value="Add"/>
-            </form>
+                <input type = "button" className="add-comment-btn " value="Add"/>
+            </div>
             {comments.map((comment) => {
                 return <Comment comment ={comment}/>
             })
