@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Comment from './Comment'
 import './Comments.css'
 import { useAuth } from '../../contexts/AuthContext'
 
 
 export default function Comments({survey}) {
-    const[comments,setComments] = useState(null);
+    const[comments, setComments] = useState([])
+    const [reloadComment, setReloadComment] = useState(true) 
     const {currentUserID} = useAuth()
+    const commentRef = useRef(null)
     
     const submitComments = async () => {
         const submitComment = async () => {
@@ -16,11 +18,12 @@ export default function Comments({survey}) {
                     'Content-type': 'application/json'
                 },
                 body: JSON.stringify({
-                    userID: currentUserID,
-                    surveyID: survey.survey_id,
-                    content: comments.content
+                    user_id: currentUserID,
+                    survey_id: survey.survey_id,
+                    content: commentRef.current.value
                 })
             })
+            setReloadComment(true)
         }
         if(currentUserID)
             await submitComment()
@@ -34,19 +37,23 @@ export default function Comments({survey}) {
             const data = await res.json()
             setComments(data)
         }
-        fetchComments()
-    })
+        if(survey && reloadComment) {
+            fetchComments()
+            setReloadComment(false)
+        }
+    }, [survey, reloadComment])
 
     return(
-        <div class='comments-container'>
+        <div className='comments-container'>
             <h3>Comments</h3>
-            <div className = "comment-input-container" onClick = {currentUserID? submitComments : null}>
-                <input type ="text area" className="comment-box " placeholder="Write a comment..."/>
-                <input type = "button" className="add-comment-btn " value="Add"/>
+            <div className = "comment-input-container" >
+                <input type ="textarea" ref={commentRef} className="comment-box" placeholder="Write a comment..."/>
+                <input type ="button" className="add-comment-btn" value="Add" onClick={submitComments}/>
             </div>
-            {comments.map((comment) => {
-                return <Comment comment ={comment}/>
-            })
+            {
+                comments.map((comment, id) => {
+                    return <Comment key={id} comment={comment}/>
+                })
             }
         </div>
     )
