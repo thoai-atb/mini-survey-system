@@ -1,18 +1,16 @@
 import React from 'react'
 import './Comments.css'
 import '../../index.css'
-import { useAuth } from '../../contexts/AuthContext'
+import formatDate from '../../utils/DateFormat'
+
 
 
 export default function Comment({comment}){
-    const {currentUserID} = useAuth()
-
     return(
-        <div className ='card comment-container' >
-            <div className='username'>{comment.username}</div>
-            <div className ='comment-content-box'>{comment.content}</div>
-            {currentUserID === comment.user_id ? <input type = "button" className="edit-comment-btn " value="Edit"/> : null}
-            {currentUserID === comment.user_id ? <input type = "button" className="delete-comment-btn " value="Delete"/> :null}
+        <div className ='card' >
+            <div className='comment-username'>{comment.username}</div>
+            <p className ='comment-content'>{comment.content}</p>
+            <div className ='comment-date'>on {formatDate(new Date(comment.time))}</div>
         </div>
     )
 }

@@ -10,7 +10,7 @@ export default function Comments({survey}) {
     const {currentUserID} = useAuth()
     const commentRef = useRef(null)
     
-    const submitComments = async () => {
+    const submitComment = async () => {
         const submitComment = async () => {
             await fetch(`/api/comments/`, {
                 method: 'POST',
@@ -25,15 +25,15 @@ export default function Comments({survey}) {
             })
             setReloadComment(true)
         }
-        if(currentUserID)
+        if(commentRef.current.value !== ""){
             await submitComment()
+            commentRef.current.value = ""
+        }
     }
 
     useEffect(() => {
         const fetchComments = async () => {
-            const url = new URL('/api/comments/', window.location)
-            url.searchParams.append('surveyID', survey.survey_id)
-            const res = await fetch(url)
+            const res = await fetch(`/api/comments/${survey.survey_id}`)
             const data = await res.json()
             setComments(data)
         }
@@ -42,18 +42,23 @@ export default function Comments({survey}) {
             setReloadComment(false)
         }
     }, [survey, reloadComment])
-
     return(
-        <div className='comments-container'>
-            <h3>Comments</h3>
-            <div className = "comment-input-container" >
-                <input type ="textarea" ref={commentRef} className="comment-box" placeholder="Write a comment..."/>
-                <input type ="button" className="add-comment-btn" value="Add" onClick={submitComments}/>
-            </div>
+        <div className=''>
+            <h3>{comments.length} comments</h3>
+            <div className = 'txt-ctr'>  
             {
                 comments.map((comment, id) => {
                     return <Comment key={id} comment={comment}/>
                 })
+            }
+            </div>
+            {
+            currentUserID === null ? <h3>Login to comment</h3> :
+                <div className = "" >
+                    <h3>Your Comment here!</h3>
+                    <input type ="textarea" ref={commentRef} className="" placeholder="Write a comment..."/>
+                    <input type ="button" className="add-comment-btn" value="Add" onClick={submitComment}/>
+                </div>
             }
         </div>
     )

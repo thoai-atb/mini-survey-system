@@ -1,48 +1,22 @@
-.comments-container {
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-    justify-content: center;
-    align-items: center;
-}
-
-.comments-container h3{
-    margin-top: 40px;
-    margin-bottom: 0px;
-    float: left;
-}
-
 .comment-box {
     background-color: white;
-    flex:1;
 }
 
 .add-comment-btn{
     width:20%;
 }
 
-.comment-input-container{
-    display: flex;
-    justify-content: stretch;
-}
-
-
-
-.comment-container {
-    display:inline-flex;
-    flex-direction: column;
-    justify-content: center;
-    width:30%;
-    margin-top: 20px;
-    
-}
-
-.username {
+.comment-username {
     float:left;
     font-weight:bold;
 }
 
-.comment-content-box {
+.comment-content {
     float:left;
     margin-top: 20px;
+}
+
+.comment-date {
+    color: gray;
+    font-style: italic;
 }
