@@ -1,5 +1,13 @@
+.comment-input-area{
+    display:flex;
+}
 .comment-box {
-    background-color: white;
+}
+
+.comment-area{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .add-comment-btn{
@@ -12,8 +20,7 @@
 }
 
 .comment-content {
-    float:left;
-    margin-top: 20px;
+    background: white;
 }
 
 .comment-date {
