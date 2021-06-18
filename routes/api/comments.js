@@ -100,4 +100,56 @@ comment_router.post('/', (req, res) => {
         })
     });
 });
+
+// UPDATE content of comments
+comment_router.put('/:commentID', (req, res)=>{
+    let commentID = parseInt(req.params.commentID);
+    let content = req.body.content;
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.log(err);
+            res.status(500).json({msg: "Internal server error: Could not get connection."});
+            return;
+        }
+        connection.query(`UPDATE comments SET content = "${content}" WHERE comment_id = ${commentID}`, (err, rows, fields) => {
+            if (err) {
+                console.log(err);
+                res.status(400).json({msg: "Bad Request."});
+                return;
+            }
+            connection.release();
+            if (err) {
+                console.log(err);
+                res.status(500).json({msg: "Internal server error: Could not close connection."});
+                return;
+            }
+        })
+    }); 
+})
+
+// DELETE comments
+comment_router.delete('/:commentID', (req, res)=>{
+    let commentID = parseInt(req.params.commentID);
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.log(err);
+            res.status(500).json({msg: "Internal server error: Could not get connection."});
+            return;
+        }
+        connection.query(`DELETE FROM comments WHERE comment_id = "${commentID}"`, (err, rows, fields) => {
+            if (err) {
+                console.log(err);
+                res.status(400).json({msg: "Bad Request."});
+                return;
+            }
+            res.json(rows);
+            connection.release();
+            if (err) {
+                console.log(err);
+                res.status(500).json({msg: "Internal server error: Could not close connection."});
+                return;
+            }
+        })
+    }); 
+})
 module.exports = comment_router;
