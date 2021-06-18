@@ -5,20 +5,19 @@ import formatDate from '../../utils/DateFormat'
 
 
 
-export default function Comment({comment}){
+export default function Comment({comment, setReloadComment}){
     
     const editComment = () => {
         let editedComment = window.prompt("Edit Your Comment: ")
         console.log(editedComment)
     }
 
-    const deleteComment = () => {
-        if(window.confirm("Are you sure you want to delete this comment?"))
-            console.log("comment deleted");
-        else
-            console.log("comment deletion cancelled")
+    const deleteComment = async () => {
+        if(!window.confirm("Are you sure you want to delete this comment?"))
+            return;
+        await fetch('/api/comments/' + comment.comment_id, {method: 'DELETE'})
+        setReloadComment(true)
     }
-
 
     return(
         <div className ='card card-wide comment-card' >

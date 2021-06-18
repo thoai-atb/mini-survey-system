@@ -8,7 +8,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
-DROP DATABASE IF EXISTS `mini_survey_system`
+DROP DATABASE IF EXISTS `mini_survey_system`;
 CREATE DATABASE IF NOT EXISTS `mini_survey_system` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `mini_survey_system`;
 

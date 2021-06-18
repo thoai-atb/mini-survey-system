@@ -60,7 +60,7 @@ export default function Comments({survey}) {
             <div className = 'comment-area'>  
             {
                 comments.map((comment, id) => {
-                    return <Comment key={id} comment={comment}/>
+                    return <Comment key={id} comment={comment} setReloadComment={setReloadComment}/>
                 })
             }
             </div>
