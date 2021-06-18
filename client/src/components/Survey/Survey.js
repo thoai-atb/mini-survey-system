@@ -75,6 +75,7 @@ export default function Survey({match}) {
             return
         fetchOptionResults()
     }, [answerID, survey, currentUserID])
+    
     return (
         <div className="txt-ctr">
             <div className="card survey-card card-wide">

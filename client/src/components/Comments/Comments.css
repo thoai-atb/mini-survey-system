@@ -1,29 +1,57 @@
-.comment-input-area{
-    display:flex;
-}
-.comment-box {
+.comment-div {
+    margin: 20px;
 }
 
-.comment-area{
-    display:flex;
+/* COMMENT INPUT */
+
+.comment-input-area{
+    display: inline-block;
+    text-align: left;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    padding-top: 20px;
+
+}
+
+.comment-box {
+    width: 100%;
+    margin: 20px 0px;
+}
+
+.comment-add-btn {
+    margin: 0px; 
+}
+
+
+/* COMMENT AREA */
+
+.comment-area {
+    display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.add-comment-btn{
-    width:20%;
+.comment-card {
+    margin: 20px 0px;
+}
+
+.comment-header {
+    display: block;
 }
 
 .comment-username {
-    float:left;
-    font-weight:bold;
-}
-
-.comment-content {
-    background: white;
+    display: inline-block;
+    font-weight: bold;
+    margin-right: 20px;
 }
 
 .comment-date {
+    display: inline-block;
     color: gray;
     font-style: italic;
+}
+
+.comment-content {
+    display: block;
+    margin: 20px 0px;
 }

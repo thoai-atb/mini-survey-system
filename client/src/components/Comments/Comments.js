@@ -42,9 +42,21 @@ export default function Comments({survey}) {
             setReloadComment(false)
         }
     }, [survey, reloadComment])
+
     return(
-        <div className=''>
-            <h3>{comments.length} comments</h3>
+        <div className='comment-div '>
+            <h2>Comment Section</h2>
+            {
+                currentUserID === null ? 
+                <h3>Login to comment</h3> 
+                :
+                <div className = "card card-wide comment-input-area" >
+                    <h3>✍ Add a comment</h3>
+                    <textarea ref={commentRef} rows={3} className="comment-box" placeholder="Write a comment..."/>
+                    <button className="comment-add-btn" onClick={submitComment}>Add</button>
+                </div>
+            }
+            <h3>Comments ({comments.length})</h3>
             <div className = 'comment-area'>  
             {
                 comments.map((comment, id) => {
@@ -52,16 +64,6 @@ export default function Comments({survey}) {
                 })
             }
             </div>
-            <h3>Your Comment here!</h3>
-            {
-            currentUserID === null ? 
-                <h3>Login to comment</h3> 
-                :
-                <div className = "comment-input-area" >
-                    <input type ="textarea" rows = "10" cols="60" ref={commentRef} className="comment-box" placeholder="Write a comment..."/>
-                    <input type ="button" className="add-comment-btn" value="Add" onClick={submitComment}/>
-                </div>
-            }
         </div>
     )
 }
