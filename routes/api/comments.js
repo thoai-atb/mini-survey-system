@@ -117,6 +117,7 @@ comment_router.put('/:commentID', (req, res)=>{
                 res.status(400).json({msg: "Bad Request."});
                 return;
             }
+            res.status(200).send("update")
             connection.release();
             if (err) {
                 console.log(err);

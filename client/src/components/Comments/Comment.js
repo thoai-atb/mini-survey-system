@@ -7,9 +7,18 @@ import formatDate from '../../utils/DateFormat'
 
 export default function Comment({comment, setReloadComment}){
     
-    const editComment = () => {
+    const editComment = async () => {
         let editedComment = window.prompt("Edit Your Comment: ")
-        console.log(editedComment)
+        if(!editedComment)
+            return
+        await fetch('/api/comments/' + comment.comment_id, {
+            method: 'PUT',
+            headers: {
+                'Content-type' : 'application/json'
+            },
+            body: JSON.stringify({content: editedComment})
+        })
+        setReloadComment(true)
     }
 
     const deleteComment = async () => {
