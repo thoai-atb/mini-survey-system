@@ -55,3 +55,13 @@
     display: block;
     margin: 20px 0px;
 }
+
+.comment-modify-button {
+    color: gray;
+    margin-right: 8px;
+}
+
+.comment-modify-button:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
