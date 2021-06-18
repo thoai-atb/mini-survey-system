@@ -40,9 +40,12 @@
 }
 
 .comment-username {
-    display: inline-block;
     font-weight: bold;
-    margin-right: 20px;
+}
+
+.comment-username, .comment-modified {
+    display: inline-block;
+    margin-right: 10px;
 }
 
 .comment-date {

@@ -48,7 +48,7 @@ export default function Comments({survey}) {
             <h2>Comment Section</h2>
             {
                 currentUserID === null ? 
-                <h3>Login to comment</h3> 
+                <p><i>(login to comment)</i></p> 
                 :
                 <div className = "card card-wide comment-input-area" >
                     <h3>✍ Add a comment</h3>

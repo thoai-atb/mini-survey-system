@@ -2,10 +2,13 @@ import React from 'react'
 import './Comments.css'
 import '../../index.css'
 import formatDate from '../../utils/DateFormat'
+import { useAuth } from '../../contexts/AuthContext'
 
 
 
 export default function Comment({comment, setReloadComment}){
+
+    const {currentUserID} = useAuth()
     
     const editComment = async () => {
         let editedComment = window.prompt("Edit Your Comment: ")
@@ -32,13 +35,20 @@ export default function Comment({comment, setReloadComment}){
         <div className ='card card-wide comment-card' >
             <div className='comment-header'>
                 <div className='comment-username'>{comment.username}</div>
+                {
+                    (comment.modified === 1) && <div className='comment-modified'>(Edited)</div>
+                }
                 <div className ='comment-date'>{formatDate(new Date(comment.time))}</div>
             </div>
             <div className ='comment-content'>{comment.content}</div>
-            <div className='comment-footer'>
-                <span className="comment-modify-button" onClick={() => editComment()}>Edit</span>
-                <span className="comment-modify-button" onClick={() => deleteComment()}>Delete</span>
-            </div>
+            {
+                currentUserID === comment.user_id && (
+                    <div className='comment-footer'>
+                        <span className="comment-modify-button" onClick={() => editComment()}>Edit</span>
+                        <span className="comment-modify-button" onClick={() => deleteComment()}>Delete</span>
+                    </div>
+                )
+            }
         </div>
     )
 }

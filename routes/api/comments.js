@@ -57,7 +57,7 @@ comment_router.get('/:surveyID', (req, res) => {
             res.status(500).json({msg: "Internal server error: Could not get connection."});
             return;
         }
-        connection.query(`SELECT c.comment_id, c.content, u.user_id, u.username,c.time FROM comments c INNER JOIN surveys s ON s.survey_id=c.survey_id INNER JOIN users u ON u.user_id = c.user_id WHERE s.survey_id = ${surveyID} ;`, (err, rows, fields) => {
+        connection.query(`SELECT c.comment_id, c.content, c.modified, u.user_id, u.username, c.time FROM comments c INNER JOIN surveys s ON s.survey_id=c.survey_id INNER JOIN users u ON u.user_id = c.user_id WHERE s.survey_id = ${surveyID} ;`, (err, rows, fields) => {
             if (err) {
                 console.log(err);
                 res.status(500).json({msg: "Internal server error."});
@@ -111,7 +111,7 @@ comment_router.put('/:commentID', (req, res)=>{
             res.status(500).json({msg: "Internal server error: Could not get connection."});
             return;
         }
-        connection.query(`UPDATE comments SET content = "${content}" WHERE comment_id = ${commentID}`, (err, rows, fields) => {
+        connection.query(`UPDATE comments SET content = "${content}", modified = 1 WHERE comment_id = ${commentID}`, (err, rows, fields) => {
             if (err) {
                 console.log(err);
                 res.status(400).json({msg: "Bad Request."});
