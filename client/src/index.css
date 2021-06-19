@@ -70,6 +70,7 @@ button {
 }
 
 button:focus, button:hover {
+    cursor: pointer;
     outline: none;
     border: 5px solid var(--color1);
 }

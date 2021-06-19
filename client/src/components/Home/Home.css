@@ -47,11 +47,26 @@
     border: 2px solid red;
 }
 
-.board-title {
+.board .board-title {
     font-size: 30px;
     padding: 0px;
     margin: 0px;
     font-family: 'Open Sans', sans-serif;
     color: var(--color6);
     font-weight: bold;
+}
+
+.board p {
+    font-size: 20px;
+}
+
+.board button {
+    background-color: inherit;
+    filter: brightness(1.5) saturate(0.7);
+    border: none;
+    color: inherit;
+}
+
+.board button:hover {
+    transform: scale(1.05);
 }
