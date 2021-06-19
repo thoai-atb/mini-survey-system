@@ -9,6 +9,7 @@ import Signup from './components/Authentication/Signup'
 import Profile from './components/Profile/Profile'
 import PrivateRoute from './components/PrivateRoute/PrivateRoute'
 import Survey from './components/Survey/Survey'
+import PasswordReset from './components/Authentication/PasswordReset'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <PrivateRoute path="/create" exact component={Create} />
           <Route path="/login" exact component={Login} />
           <Route path="/signup" exact component={Signup} />
+          <Route path="/resetpassword" exact component={PasswordReset} />
           <Route path="/survey/:id" component={Survey} />
           <PrivateRoute path="/profile" exact component={Profile} />
         </div>
