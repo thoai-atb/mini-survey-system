@@ -15,3 +15,13 @@
     font-size: 20px;
     font-style: oblique;
 }
+
+.browse-survey-delete {
+    color: gray;
+    margin-right: 8px;
+}
+
+.browse-survey-delete:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}

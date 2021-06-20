@@ -272,6 +272,33 @@ surveys_router.get('/search/', (req, res) => {
     })
 })
 
+surveys_router.delete('/:surveyID', (req, res) => {
+    let surveyID = req.params.surveyID
+    pool.getConnection((err, connection) => {
+        if (err) {
+            console.log(err);
+            res.status(500).json({msg: "Internal server error: Could not get connection."});
+            return;
+        }
+        if (surveyID) {
+            connection.query(`DELETE FROM surveys WHERE survey_id = ${surveyID}`, (err, rows, fields) => {
+                if (err) {
+                    console.log(err);
+                    res.status(400).json({msg: "Bad Request."});
+                    return;
+                }
+                res.json(rows);
+                connection.release();
+                if (err) {
+                    console.log(err);
+                    res.status(500).json({msg: "Internal server error: Could not close connection."});
+                    return;
+                }
+            })
+        };
+    })
+})
+
 surveys_router.post('/', (req, res) => {
     let authorID = req.body.authorID
     let title = req.body.title
